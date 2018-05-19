@@ -413,9 +413,9 @@ public class RemoteExplorer implements IExplorer {
     public boolean setTransfer(boolean ascii) throws IOException {
         this.ascii = ascii;
         if (ascii) {
-            write(Protocol.TRANSFER + " ASCII");
+            write(Protocol.TRANSFER + " " + Protocol.ASCII);
         } else {
-            write(Protocol.TRANSFER + " BINARY");
+            write(Protocol.TRANSFER + " " + Protocol.BINARY);
         }
         return reader.readLine().equals(Protocol.OK);
     }

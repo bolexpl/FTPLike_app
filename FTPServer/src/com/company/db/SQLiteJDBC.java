@@ -37,8 +37,8 @@ public class SQLiteJDBC {
     private void createTable() throws SQLException {
         String sql = "CREATE TABLE IF NOT EXISTS users(" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "login CHAR(50)," +
-                "pass CHAR(50))";
+                "login VARCHAR(50)," +
+                "pass VARCHAR(50))";
         statement.executeUpdate(sql);
     }
 

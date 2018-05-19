@@ -51,7 +51,6 @@ public class ClientThread extends Thread {
         this.window = window;
         this.model = model;
 
-
         reader = new BufferedReader(new InputStreamReader(controlSocket.getInputStream()));
         writer = new BufferedWriter(new OutputStreamWriter(controlSocket.getOutputStream()));
         explorer = new LocalExplorer(System.getProperty("user.home"));
