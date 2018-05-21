@@ -521,12 +521,12 @@ public class MainWindow extends JFrame {
         for (int x : indexes) {
             if (get) {
                 cell = (FilesModel.FileCell) remoteDir.getValueAt(x, 0);
-                if (!cell.getName().equals(".."))
+                if (!cell.getName().equals("..") && !cell.isDirectory())
                     remoteExplorer.get(cell.getName(),
                             localExplorer.getDir());
             } else {
                 cell = (FilesModel.FileCell) localDir.getValueAt(x, 0);
-                if (!cell.getName().equals(".."))
+                if (!cell.getName().equals("..") && !cell.isDirectory())
                     remoteExplorer.put(cell.getName(),
                             localExplorer.getDir());
             }
@@ -677,8 +677,6 @@ public class MainWindow extends JFrame {
             create = new JMenuItem("Utwórz plik");
             append = new JMenuItem("Dopisz do pliku");
 
-            get.addActionListener(this);
-            put.addActionListener(this);
             open.addActionListener(this);
             mkdir.addActionListener(this);
             hidden.addActionListener(this);
@@ -691,8 +689,13 @@ public class MainWindow extends JFrame {
             create.addActionListener(this);
             append.addActionListener(this);
 
-            add(get);
-            add(put);
+            if (local) {
+                get.addActionListener(this);
+                add(get);
+            } else {
+                put.addActionListener(this);
+                add(put);
+            }
             add(open);
             add(create);
             add(mkdir);
@@ -750,7 +753,7 @@ public class MainWindow extends JFrame {
                     break;
                 case "Wyślij":
 
-                    if (local && localDir.getSelectedRows().length > 0)
+                    if (local && localDir.getSelectedRows().length > 0 && isLogged)
                         put();
 
                     break;
@@ -839,6 +842,9 @@ public class MainWindow extends JFrame {
             }
         }
 
+        /**
+         * Metoda do wklejania pliku
+         */
         private void p() {
             String path2;
             if (local)
@@ -863,6 +869,9 @@ public class MainWindow extends JFrame {
             }
         }
 
+        /**
+         * Metoda ustawia ścieżki do kopiowania i przenoszenia pliku
+         */
         private void setPaths(boolean copy) {
             if (local && localDir.getSelectedRows().length == 1) {
                 String path = getFilePath(localExplorer, localDir);
