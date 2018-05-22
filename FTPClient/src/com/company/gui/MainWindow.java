@@ -534,7 +534,7 @@ public class MainWindow extends JFrame {
     }
 
     /**
-     * Metoda do wkliejania pliku po wycięciu lub skopiowaniu
+     * Metoda do wklejania pliku po wycięciu lub skopiowaniu
      *
      * @param local plik lokalny lub zdalny
      * @param path2 ścieżka docelowa
@@ -558,7 +558,7 @@ public class MainWindow extends JFrame {
     }
 
     /**
-     * Metoda do wkliejania pliku po wycięciu lub skopiowaniu
+     * Metoda do wklejania pliku po wycięciu lub skopiowaniu
      *
      * @param explorer explorer plików
      * @param path1    ścieżka źródłowa
