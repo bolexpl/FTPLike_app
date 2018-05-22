@@ -71,11 +71,6 @@ public class Main {
 //        } catch (Exception e) {
 //            System.err.println("Nie udała się zmiana wyglądu: ");
 //        }
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new MainWindow();
-            }
-        });
+        EventQueue.invokeLater(MainWindow::new);
     }
 }
