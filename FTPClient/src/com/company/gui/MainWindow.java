@@ -778,6 +778,10 @@ public class MainWindow extends JFrame {
                         localExplorer.invertHidden();
                         localModel.updateData();
                         localModel.fireTableDataChanged();
+                    }else{
+                        remoteExplorer.invertHidden();
+                        remoteModel.updateData();
+                        remoteModel.fireTableDataChanged();
                     }
 
                     contentPane.revalidate();
