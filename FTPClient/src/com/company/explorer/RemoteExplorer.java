@@ -1,7 +1,8 @@
 package com.company.explorer;
 
-import lib.ByteUtils;
 import com.company.Main;
+import com.company.server.files.*;
+import lib.ByteUtils;
 import lib.Protocol;
 import com.company.files.*;
 import lib.Alert;

@@ -2,7 +2,7 @@ package lib;
 
 /**
  * Klasa ze stałymi opisującymi protokół
- * */
+ */
 public class Protocol {
 
     public static final String USER = "USER";
@@ -39,8 +39,9 @@ public class Protocol {
 
     /**
      * Rozmiar pakietu w transferze binarnym
-     * */
+     */
     public static final int PACKET_LENGTH = 512;
 
-    private Protocol() {}
+    private Protocol() {
+    }
 }

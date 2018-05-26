@@ -8,15 +8,15 @@ import java.awt.event.*;
 /**
  * Klasa okna dialogowego do wprowadzenia ciągu znaków do zapisania do pliku
  */
-public class LinePrompt extends JDialog {
+class LinePrompt extends JDialog {
 
     private JTextField nameField;
     private MainWindow mainWindow;
 
     /**
      * @param mainWindow Referencja do głównego okna
-     * */
-    public LinePrompt(MainWindow mainWindow) {
+     */
+    LinePrompt(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
         nameField = new JTextField(40);
         JPanel contentPane = new JPanel();
@@ -84,6 +84,9 @@ public class LinePrompt extends JDialog {
 
     }
 
+    /**
+     * Metoda wywałana na przycisk OK
+     */
     private void onOK() {
         String s = nameField.getText();
         mainWindow.setTmpName(s);

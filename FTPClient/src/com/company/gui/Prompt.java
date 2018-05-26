@@ -8,7 +8,7 @@ import java.awt.event.*;
 /**
  * Klasa okna dialogowego do wprowadzania nazwy pliku lub katalogu
  */
-public class Prompt extends JDialog {
+class Prompt extends JDialog {
 
     private JTextField nameField;
     private JLabel error;
@@ -17,7 +17,7 @@ public class Prompt extends JDialog {
     /**
      * @param mainWindow Referencja do głównego okna
      * */
-    public Prompt(MainWindow mainWindow) {
+    Prompt(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
         nameField = new JTextField();
         JPanel contentPane = new JPanel();
@@ -83,6 +83,9 @@ public class Prompt extends JDialog {
 
     }
 
+    /**
+     * Metoda wywałana na przycisk OK
+     */
     private void onOK() {
         String s = nameField.getText();
         if (!s.equals("")) {

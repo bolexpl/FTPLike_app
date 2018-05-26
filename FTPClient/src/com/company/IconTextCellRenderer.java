@@ -8,7 +8,7 @@ import java.awt.*;
 
 /**
  * Klasa renderująca komórkę w tabeli z nazwą pliku i ikoną
- * */
+ */
 public class IconTextCellRenderer extends DefaultTableCellRenderer {
 
     private ImageIcon folderIcon;
@@ -46,9 +46,9 @@ public class IconTextCellRenderer extends DefaultTableCellRenderer {
 
         FilesModel.FileCell f = (FilesModel.FileCell) value;
 
-        if(f.isDirectory()){
+        if (f.isDirectory()) {
             setIcon(folderIcon);
-        }else{
+        } else {
             setIcon(fileIcon);
         }
 

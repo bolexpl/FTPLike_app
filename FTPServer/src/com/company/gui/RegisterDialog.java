@@ -11,13 +11,13 @@ import java.sql.SQLException;
 
 /**
  * Okno dialogowe do rejestracji użytkownika
- * */
-public class RegisterDialog extends JDialog {
+ */
+class RegisterDialog extends JDialog {
 
     private JTextField loginField;
     private JPasswordField passwordField;
 
-    public RegisterDialog() {
+    RegisterDialog() {
         JPanel mainPanel = new JPanel();
         JPanel center = new JPanel();
         JPanel bottom = new JPanel();
@@ -67,7 +67,7 @@ public class RegisterDialog extends JDialog {
 
     /**
      * Metoda wywołana przy wciśnięciu przycisku 'Rejestruj'
-     * */
+     */
     private void onOk() {
         String login = loginField.getText();
         if (login.equals("")) {
@@ -85,7 +85,7 @@ public class RegisterDialog extends JDialog {
         SQLiteJDBC db = SQLiteJDBC.getInstance();
         try {
 
-            if(db.select(login, null).size() != 0){
+            if (db.select(login, null).size() != 0) {
                 new Alert("Istnieje już taki login");
                 return;
             }

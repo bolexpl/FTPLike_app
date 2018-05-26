@@ -3,12 +3,11 @@ package com.company.files;
 import com.company.explorer.IExplorer;
 
 import javax.swing.table.AbstractTableModel;
-import java.io.File;
 import java.util.*;
 
 /**
  * Klasa modelu dla danych w tabeli
- * */
+ */
 public class FilesModel extends AbstractTableModel {
 
     private final static String[] COLUMNS = {"Nazwa", "Rozmiar", "Typ"};
@@ -27,8 +26,9 @@ public class FilesModel extends AbstractTableModel {
 
     /**
      * Metoda ustawiająca explorer
+     *
      * @param explorer Explorer
-     * */
+     */
     public void setExplorer(IExplorer explorer) {
         this.explorer = explorer;
         updateData(explorer.listFiles());
@@ -36,7 +36,7 @@ public class FilesModel extends AbstractTableModel {
 
     /**
      * Metoda aktualizująca dane w modelu
-     * */
+     */
     public void updateData() {
         if (explorer != null)
             updateData(explorer.listFiles());
@@ -44,8 +44,9 @@ public class FilesModel extends AbstractTableModel {
 
     /**
      * Metoda aktualizująca dane w modelu
+     *
      * @param list Lista plików
-     * */
+     */
     public void updateData(List<FileInfo> list) {
         if (list == null) {
             files.clear();
@@ -54,7 +55,7 @@ public class FilesModel extends AbstractTableModel {
 
         Vector<FileTableItem> tmp = new Vector<>();
 
-        tmp.add(new FileTableItem("..", false, null, true));
+        tmp.add(new FileTableItem("..", null, true));
 
         for (FileInfo f : list) {
             tmp.add(new FileTableItem(f));
@@ -148,17 +149,17 @@ public class FilesModel extends AbstractTableModel {
 
     /**
      * Klasa zawierająca podstwowe informacje o pliku
-     * */
+     */
     public class FileCell {
 
         /**
          * Nazwa pliku
-         * */
+         */
         private String name;
 
         /**
          * Czy katalog
-         * */
+         */
         private boolean directory;
 
         FileCell(String name, boolean directory) {
@@ -168,14 +169,14 @@ public class FilesModel extends AbstractTableModel {
 
         /**
          * {@link FileCell#name}
-         * */
+         */
         public String getName() {
             return name;
         }
 
         /**
          * {@link FileCell#directory}
-         * */
+         */
         public boolean isDirectory() {
             return directory;
         }

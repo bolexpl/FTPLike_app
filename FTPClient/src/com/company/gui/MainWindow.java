@@ -1,11 +1,10 @@
 package com.company.gui;
 
+import com.company.IconTextCellRenderer;
 import com.company.explorer.IExplorer;
 import com.company.explorer.LocalExplorer;
 import com.company.explorer.RemoteExplorer;
 import com.company.files.FilesModel;
-import com.company.IconTextCellRenderer;
-import com.company.files.TransferInfo;
 import com.company.files.TransferModel;
 import lib.Alert;
 
@@ -778,7 +777,7 @@ public class MainWindow extends JFrame {
                         localExplorer.invertHidden();
                         localModel.updateData();
                         localModel.fireTableDataChanged();
-                    }else{
+                    } else {
                         remoteExplorer.invertHidden();
                         remoteModel.updateData();
                         remoteModel.fireTableDataChanged();

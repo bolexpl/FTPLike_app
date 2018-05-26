@@ -17,13 +17,6 @@ import java.net.ServerSocket;
 public class Main {
 
     public static void main(String[] args) {
-        gui();
-    }
-
-    /**
-     * Metoda tworząca interfejs graficzny.
-     */
-    private static void gui() {
 //        try {
 //            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 //        } catch (Exception e) {

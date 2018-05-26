@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Model klientów dla tabeli
- * */
+ */
 public class ClientsModel extends AbstractTableModel {
 
     private List<ClientThread> list;
@@ -16,19 +16,29 @@ public class ClientsModel extends AbstractTableModel {
         this.list = new LinkedList<>();
     }
 
-    public void remove(ClientThread cl){
+    /**
+     * Usuwanie odłączonego użytkownika
+     *
+     * @param cl wątek klienta
+     */
+    void remove(ClientThread cl) {
         list.remove(cl);
         fireTableDataChanged();
     }
 
-    public void add(ClientThread cl){
+    /**
+     * Dodawanie podłączonego użytkownika
+     *
+     * @param cl wątek klienta
+     */
+    void add(ClientThread cl) {
         list.add(cl);
         fireTableDataChanged();
     }
 
     /**
      * Metoda kończy wszystkie połączenia
-     * */
+     */
     public void closeAll() {
         for (ClientThread cl : list) {
             cl.disconnect();

@@ -1,8 +1,8 @@
 package com.company;
 
 /**
- * Klasa z informacjami do zapisywania nowego pliku
- * */
+ * Klasa z informacjami potrzebnymi do zapisywania nowego pliku
+ */
 public class NewFile {
     public String path;
 

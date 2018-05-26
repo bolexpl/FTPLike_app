@@ -1,12 +1,12 @@
 package com.company.clients;
 
-import lib.ByteUtils;
 import com.company.Main;
 import com.company.NewFile;
+import com.company.explorer.LocalExplorer;
+import lib.ByteUtils;
 import lib.Protocol;
 import com.company.db.SQLiteJDBC;
 import com.company.db.User;
-import com.company.explorer.LocalExplorer;
 import com.company.gui.MainWindow;
 
 import java.awt.*;
@@ -57,6 +57,9 @@ public class ClientThread extends Thread {
         start();
     }
 
+    /**
+     * Getter dla controlSocket
+     */
     public Socket getControlSocket() {
         return controlSocket;
     }
@@ -538,6 +541,9 @@ public class ClientThread extends Thread {
         super.finalize();
     }
 
+    /**
+     * Getter dla loginu
+     */
     String getLogin() {
         return login;
     }
@@ -632,7 +638,7 @@ public class ClientThread extends Thread {
             long size = f.length();
             send(ByteUtils.longToByte(size));
 
-            while(size > 0){
+            while (size > 0) {
                 k = buff.read(data, 0, Protocol.PACKET_LENGTH);
                 send(data, k);
                 size -= k;

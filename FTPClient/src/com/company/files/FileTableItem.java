@@ -4,17 +4,15 @@ import java.text.DecimalFormat;
 
 /**
  * Klasa przekazująca dane dla tabeli
- * */
-public class FileTableItem {
+ */
+class FileTableItem {
 
     private String name;
-    private boolean hidden;
     private String size;
     private boolean directory;
 
-    public FileTableItem(FileInfo f) {
+    FileTableItem(FileInfo f) {
         this.name = f.getName();
-        this.hidden = f.isHidden();
         this.directory = f.isDirectory();
 
         long length = f.getLength();
@@ -43,22 +41,21 @@ public class FileTableItem {
         }
     }
 
-    public FileTableItem(String name, boolean hidden, String size, boolean directory) {
+    FileTableItem(String name, String size, boolean directory) {
         this.name = name;
-        this.hidden = hidden;
         this.size = size;
         this.directory = directory;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public String getSize() {
+    String getSize() {
         return size;
     }
 
-    public boolean isDirectory() {
+    boolean isDirectory() {
         return directory;
     }
 }

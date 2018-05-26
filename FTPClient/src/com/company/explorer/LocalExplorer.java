@@ -166,9 +166,9 @@ public class LocalExplorer implements IExplorer {
 
         if (f.isDirectory()) {
             String[] entries = f.list();
-            if (entries != null){
+            if (entries != null) {
                 for (String s : entries) {
-                    rm(name+"/"+s);
+                    rm(name + "/" + s);
                 }
             }
         }
