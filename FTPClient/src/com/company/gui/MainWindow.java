@@ -14,6 +14,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
+/**
+ * Klasa głównego okna
+ */
 public class MainWindow extends JFrame {
 
     private FilesModel localModel;

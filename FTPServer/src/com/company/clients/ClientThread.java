@@ -59,6 +59,8 @@ public class ClientThread extends Thread {
 
     /**
      * Getter dla controlSocket
+     *
+     * @return constrolSocket
      */
     public Socket getControlSocket() {
         return controlSocket;
@@ -84,7 +86,7 @@ public class ClientThread extends Thread {
      * Metoda służąca do logowania na serwerze
      *
      * @return sukces
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private boolean login() throws IOException {
 
@@ -125,7 +127,7 @@ public class ClientThread extends Thread {
     /**
      * Metoda ustawiająca typ transferu
      *
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void transferMode() throws IOException {
         String args[] = reader.readLine().split(" ");
@@ -141,6 +143,8 @@ public class ClientThread extends Thread {
 
     /**
      * Metoda nasłuchująca komunikatów sterujacych od klienta
+     *
+     * @throws IOException wyjątek
      */
     private void listen() throws IOException {
         String args[];
@@ -236,7 +240,7 @@ public class ClientThread extends Thread {
     /**
      * Metoda do połączenia w trybie pasywnym
      *
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void passiv() throws IOException {
         int x;
@@ -259,7 +263,7 @@ public class ClientThread extends Thread {
     /**
      * Metoda do połączenia w trybie aktywnym
      *
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void active(String arg) throws IOException {
         int port = Integer.parseInt(arg);
@@ -278,7 +282,7 @@ public class ClientThread extends Thread {
     /**
      * Metoda wysyłająca listę plików i katalogów w katalogu roboczym
      *
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void ls(String arg) throws IOException {
         List<File> list;
@@ -312,7 +316,7 @@ public class ClientThread extends Thread {
      * Metoda tworząca pusty plik
      *
      * @param name Nazwa nowego pliku
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void touch(String name) throws IOException {
         if (explorer.touch(name))
@@ -338,7 +342,7 @@ public class ClientThread extends Thread {
      *
      * @param fileName Nazwa pliku
      * @param data     Ciąg znaków
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void append(String fileName, String data) throws IOException {
         if (explorer.append(fileName, data))
@@ -350,7 +354,7 @@ public class ClientThread extends Thread {
     /**
      * Metoda do usuwania pliku
      *
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void rm(String fileName) throws IOException {
         if (explorer.rm(fileName))
@@ -362,7 +366,7 @@ public class ClientThread extends Thread {
     /**
      * Metoda wysyłająca aktualną ścieżkę
      *
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void pwd() throws IOException {
         write(explorer.getDir());
@@ -372,7 +376,7 @@ public class ClientThread extends Thread {
      * Metoda zmieniająca aktualną ścieżkę w obiekcie explorera
      *
      * @param path Ścieżka do katalogu
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void dir(String path) throws IOException {
         if (explorer.setDir(path))
@@ -385,7 +389,7 @@ public class ClientThread extends Thread {
      * Metoda do tworzenia katalogu
      *
      * @param dir Nazwa katalogu
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void mkdir(String dir) throws IOException {
         if (explorer.mkdir(dir))
@@ -398,7 +402,7 @@ public class ClientThread extends Thread {
      * Metoda do pobierania pliku z serwera
      *
      * @param file Ścieżka pliku
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void get(String file) throws IOException {
         File f = new File(file);
@@ -419,7 +423,7 @@ public class ClientThread extends Thread {
      * Metoda do wysyłania pliku na serwer
      *
      * @param path Ścieżka pliku
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void put(String path) throws IOException {
         File f = new File(path);
@@ -437,7 +441,7 @@ public class ClientThread extends Thread {
     /**
      * Metoda łącząca strumienie
      *
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void connectStreams() throws IOException {
         if (ascii) {
@@ -457,7 +461,7 @@ public class ClientThread extends Thread {
      * Metoda wysyłająca polecenia przez socket sterujący
      *
      * @param s Dane do wysłania
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void write(String s) throws IOException {
         writer.write(s);
@@ -470,7 +474,7 @@ public class ClientThread extends Thread {
      *
      * @param oldFile Stara ścieżka z nazwą
      * @param newFile Nowa ścieżka z nazwą
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void mv(String oldFile, String newFile) throws IOException {
         if (explorer.mv(oldFile, newFile))
@@ -485,7 +489,7 @@ public class ClientThread extends Thread {
      *
      * @param path1 Ścieżka źródłowa
      * @param path2 Ścieżka docelowa
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void copy(final String path1, final String path2) throws IOException {
         if (explorer.copy(path1, path2)) {
@@ -603,7 +607,7 @@ public class ClientThread extends Thread {
          * Metoda wysyłająca plik w trybie ASCII
          *
          * @param f Plik do wysłania
-         * @see IOException
+         * @throws IOException wyjątek
          */
         private void sendASCII(File f) throws IOException {
             BufferedReader buff = new BufferedReader(new FileReader(f));
@@ -627,7 +631,7 @@ public class ClientThread extends Thread {
          * Metoda wysyłająca plik w trybie binarnym
          *
          * @param f Plik do wysłania
-         * @see IOException
+         * @throws IOException wyjątek
          */
         private void sendBinary(File f) throws IOException {
             BufferedInputStream buff = new BufferedInputStream(new FileInputStream(f));
@@ -664,7 +668,7 @@ public class ClientThread extends Thread {
          * Metoda do wysyłania danych przez dataSocket
          *
          * @param data ciąg ASCII do wysłania
-         * @see IOException
+         * @throws IOException wyjątek
          */
         void send(String data) throws IOException {
             outASCII.write(data);
@@ -676,7 +680,7 @@ public class ClientThread extends Thread {
          * Metoda do wysyłania danych przez dataSocket
          *
          * @param data dane binarne
-         * @see IOException
+         * @throws IOException wyjątek
          */
         void send(byte[] data) throws IOException {
             send(data, data.length);
@@ -687,7 +691,7 @@ public class ClientThread extends Thread {
          *
          * @param data dane binarne
          * @param len  długość danych w bajtach
-         * @see IOException
+         * @throws IOException wyjątek
          */
         void send(byte[] data, int len) throws IOException {
             out.write(data, 0, len);
@@ -763,7 +767,7 @@ public class ClientThread extends Thread {
          * Metoda odbierająca plik w trybie ASCII
          *
          * @param f Plik do odebrania
-         * @see IOException
+         * @throws IOException wyjątek
          */
         private void receiveASCII(File f) throws IOException {
             BufferedWriter buff =
@@ -787,7 +791,7 @@ public class ClientThread extends Thread {
          * Metoda odbierająca plik w trybie binarnym
          *
          * @param f Plik do odebrania
-         * @see IOException
+         * @throws IOException wyjątek
          */
         private void receiveBinary(File f) throws IOException {
 

@@ -324,7 +324,7 @@ public class RemoteExplorer implements IExplorer {
     /**
      * Metoda zamykająca wszystkie połączenia w trakcie niszczenia obiektu
      *
-     * @see Throwable
+     * @throws Throwable wyjątek
      */
     @Override
     protected void finalize() throws Throwable {
@@ -468,7 +468,7 @@ public class RemoteExplorer implements IExplorer {
          * Metoda wysyłająca plik w trybie ASCII
          *
          * @param f Plik do wysłania
-         * @see IOException
+         * @throws IOException wyjątek
          */
         private void sendASCII(File f) throws IOException {
             BufferedReader buff =
@@ -492,7 +492,7 @@ public class RemoteExplorer implements IExplorer {
          * Metoda wysyłająca plik w trybie binarnym
          *
          * @param f Plik do wysłania
-         * @see IOException
+         * @throws IOException wyjątek
          */
         private void sendBinary(File f) throws IOException {
 
@@ -518,7 +518,7 @@ public class RemoteExplorer implements IExplorer {
          * Metoda do wysyłania danych przez dataSocket
          *
          * @param data ciąg ASCII do wysłania
-         * @see IOException
+         * @throws IOException wyjątek
          */
         void send(String data) throws IOException {
             outASCII.write(data);
@@ -530,7 +530,7 @@ public class RemoteExplorer implements IExplorer {
          * Metoda do wysyłania danych przez dataSocket
          *
          * @param data dane binarne
-         * @see IOException
+         * @throws IOException wyjątek
          */
         void send(byte[] data) throws IOException {
             send(data, data.length);
@@ -541,7 +541,7 @@ public class RemoteExplorer implements IExplorer {
          *
          * @param data dane binarne
          * @param len  długość danych w bajtach
-         * @see IOException
+         * @throws IOException wyjątek
          */
         void send(byte[] data, int len) throws IOException {
             out.write(data, 0, len);

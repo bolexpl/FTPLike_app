@@ -18,7 +18,7 @@ public class UsersModel extends AbstractTableModel {
 
     /**
      * Metoda odświeżająca dane w tabeli
-     * @see SQLException
+     * @throws SQLException wyjątek
      * */
     public void refresh() throws SQLException {
         list = SQLiteJDBC.getInstance().selectAll();

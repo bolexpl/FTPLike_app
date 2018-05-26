@@ -21,6 +21,8 @@ public class LocalExplorer {
 
     /**
      * Metoda pobierająca aktualną ścieżkę z obiektu explorera
+     *
+     * @return ścieżka
      */
     public String getDir() {
         return dir;
@@ -91,6 +93,7 @@ public class LocalExplorer {
      *
      * @param path1 Ścieżka źródłowa
      * @param path2 Ścieżka docelowa
+     * @return sukces
      */
     public boolean copy(String path1, String path2) {
 
@@ -108,6 +111,8 @@ public class LocalExplorer {
 
     /**
      * Metoda służąca do przechodzenia do katalogu nadrzędnego
+     *
+     * @return sukces
      */
     public boolean cdParent() {
         dir = (new File(dir)).getParent();
@@ -130,7 +135,7 @@ public class LocalExplorer {
      *
      * @param name Nazwa nowego pliku
      * @return sukces
-     * @see IOException
+     * @throws IOException wyjątek
      */
     public boolean touch(String name) throws IOException {
         File f = new File(dir + "/" + name);
@@ -143,7 +148,7 @@ public class LocalExplorer {
      * @param fileName Nazwa pliku
      * @param data     Ciąg znaków
      * @return sukces
-     * @see IOException
+     * @throws IOException wyjątek
      */
     public boolean append(String fileName, String data) throws IOException {
         File f = new File(dir + "/" + fileName);
@@ -163,6 +168,7 @@ public class LocalExplorer {
     /**
      * Metoda listująca katalog roboczy
      *
+     * @param showHidden czy pokazać ukryte
      * @return Lista elementów w katalogu
      */
     public List<File> listFiles(boolean showHidden) {

@@ -32,7 +32,7 @@ public class SQLiteJDBC {
 
     /**
      * Metoda tworząca tabelę w bazie
-     * @see SQLException
+     * @throws SQLException wyjątek
      * */
     private void createTable() throws SQLException {
         String sql = "CREATE TABLE IF NOT EXISTS users(" +
@@ -46,7 +46,7 @@ public class SQLiteJDBC {
      * Metoda do zapisania nowego użytkownika
      * @param login login
      * @param pass hasło
-     * @see SQLException
+     * @throws SQLException wyjątek
      * */
     public void insert(String login, String pass) throws SQLException {
         String sql = "INSERT INTO users (login, pass) VALUES ('" + login + "','" + pass + "');";
@@ -56,7 +56,7 @@ public class SQLiteJDBC {
     /**
      * Metoda do usunięcia użytkownika
      * @param id id użytkownika
-     * @see SQLException
+     * @throws SQLException wyjątek
      * */
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM users WHERE id=" + id + ";";
@@ -66,7 +66,7 @@ public class SQLiteJDBC {
     /**
      * Metoda Zwracająca wszystkich użytkowników
      * @return lista użytkowników
-     * @see SQLException
+     * @throws SQLException wyjątek
      * */
     public List<User> selectAll() throws SQLException {
         return select(null, null);
@@ -77,7 +77,7 @@ public class SQLiteJDBC {
      * @param login login
      * @param pass hasło
      * @return lista użytkowników
-     * @see SQLException
+     * @throws SQLException wyjątek
      * */
     public List<User> select(String login, String pass) throws SQLException {
         String sql;
