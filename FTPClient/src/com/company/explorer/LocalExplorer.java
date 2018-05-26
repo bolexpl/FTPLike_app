@@ -28,7 +28,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda pobierająca aktualną ścieżkę z obiektu explorera
+     * {@inheritDoc}
      */
     @Override
     public String getDir() {
@@ -36,9 +36,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda zmieniająca aktualną ścieżkę w obiekcie explorera
-     *
-     * @param dir Ścieżka do katalogu
+     * {@inheritDoc}
      */
     @Override
     public boolean setDir(String dir) {
@@ -47,12 +45,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda służąca do kopiowania plików między katalogami.
-     * Metoda nie służy do pobierania i wysyłania plików.
-     *
-     * @param path1 Ścieżka źródłowa
-     * @param path2 Ścieżka docelowa
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public void copy(String path1, String path2) throws IOException {
@@ -62,7 +55,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda aktualizująca ścieżkę katalogu roboczego
+     * {@inheritDoc}
      */
     @Override
     public void pwd() {
@@ -70,11 +63,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda tworząca pusty plik
-     *
-     * @param name Nazwa nowego pliku
-     * @return sukces
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public boolean touch(String name) throws IOException {
@@ -83,12 +72,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda dopisująca ciąg znaków do pliku
-     *
-     * @param fileName Nazwa pliku
-     * @param data     Ciąg znaków
-     * @return sukces
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public boolean append(String fileName, String data) throws IOException {
@@ -107,7 +91,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda negująca wartość atrybutu hidden
+     * {@inheritDoc}
      */
     @Override
     public void invertHidden() {
@@ -115,10 +99,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do pobierania pliku z serwera
-     *
-     * @param path      Ścieżka zdalna
-     * @param localPath Ścieżka lokalna
+     * {@inheritDoc}
      */
     @Override
     public void get(String path, String localPath) {
@@ -126,10 +107,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do wysyłania pliku na serwer
-     *
-     * @param path      Ścieżka zdalna
-     * @param localPath Ścieżka lokalna
+     * {@inheritDoc}
      */
     @Override
     public void put(String path, String localPath) {
@@ -137,9 +115,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do otwierania katalogu
-     *
-     * @param directory Nazwa katalogu
+     * {@inheritDoc}
      */
     @Override
     public void cd(String directory) {
@@ -153,10 +129,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do usuwania pliku
-     *
-     * @param name Nazwa pliku
-     * @return sukces
+     * {@inheritDoc}
      */
     @Override
     public boolean rm(String name) {
@@ -177,9 +150,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda listująca katalog roboczy
-     *
-     * @return Lista elementów w katalogu
+     * {@inheritDoc}
      */
     @Override
     public List<FileInfo> listFiles() {
@@ -233,11 +204,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda służąca do logowania na serwerze
-     *
-     * @param login Login
-     * @param pass  Hasło
-     * @return sukces
+     * {@inheritDoc}
      */
     @Override
     public boolean login(String login, String pass) {
@@ -245,9 +212,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do połączenia w trybie pasywnym
-     *
-     * @return sukces
+     * {@inheritDoc}
      */
     @Override
     public boolean connectPassive() {
@@ -255,9 +220,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do połączenia w trybie aktywnym
-     *
-     * @return sukces
+     * {@inheritDoc}
      */
     @Override
     public boolean connectActive() {
@@ -265,10 +228,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do tworzenia katalogu
-     *
-     * @param dir Nazwa katalogu
-     * @return sukces
+     * {@inheritDoc}
      */
     @Override
     public boolean mkdir(String dir) {
@@ -277,11 +237,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do przenoszenia i zmiany nazwy plików i katalogów
-     *
-     * @param oldFile Stara ścieżka z nazwą
-     * @param newFile Nowa ścieżka z nazwą
-     * @return sukces
+     * {@inheritDoc}
      */
     @Override
     public boolean mv(String oldFile, String newFile) {
@@ -290,7 +246,7 @@ public class LocalExplorer implements IExplorer {
     }
 
     /**
-     * Metoda kończąca połączenie
+     * {@inheritDoc}
      */
     @Override
     public void disconnect() {

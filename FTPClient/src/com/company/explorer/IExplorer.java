@@ -12,6 +12,8 @@ public interface IExplorer {
 
     /**
      * Metoda pobierająca aktualną ścieżkę z obiektu explorera
+     *
+     * @return ścieżka
      */
     String getDir();
 
@@ -19,7 +21,8 @@ public interface IExplorer {
      * Metoda zmieniająca aktualną ścieżkę w obiekcie explorera
      *
      * @param dir Ścieżka do katalogu
-     * @see IOException
+     * @return sukces
+     * @throws IOException wyjątek
      */
     boolean setDir(String dir) throws IOException;
 
@@ -29,14 +32,14 @@ public interface IExplorer {
      *
      * @param path1 Ścieżka źródłowa
      * @param path2 Ścieżka docelowa
-     * @see IOException
+     * @throws IOException wyjątek
      */
     void copy(String path1, String path2) throws IOException;
 
     /**
      * Metoda aktualizująca ścieżkę katalogu roboczego
      *
-     * @see IOException
+     * @throws IOException wyjątek
      */
     void pwd() throws IOException;
 
@@ -45,7 +48,7 @@ public interface IExplorer {
      *
      * @param name Nazwa nowego pliku
      * @return sukces
-     * @see IOException
+     * @throws IOException wyjątek
      */
     boolean touch(String name) throws IOException;
 
@@ -55,7 +58,7 @@ public interface IExplorer {
      * @param fileName Nazwa pliku
      * @param data     Ciąg znaków
      * @return sukces
-     * @see IOException
+     * @throws IOException wyjątek
      */
     boolean append(String fileName, String data) throws IOException;
 
@@ -84,7 +87,6 @@ public interface IExplorer {
      * Metoda do otwierania katalogu
      *
      * @param directory Nazwa katalogu
-     * @see IOException
      */
     void cd(String directory);
 
@@ -93,7 +95,7 @@ public interface IExplorer {
      *
      * @param name Nazwa pliku
      * @return sukces
-     * @see IOException
+     * @throws IOException wyjątek
      */
     boolean rm(String name) throws IOException;
 
@@ -110,7 +112,7 @@ public interface IExplorer {
      * @param login Login
      * @param pass  Hasło
      * @return sukces
-     * @see IOException
+     * @throws IOException wyjątek
      */
     boolean login(String login, String pass) throws IOException;
 
@@ -118,7 +120,7 @@ public interface IExplorer {
      * Metoda do połączenia w trybie pasywnym
      *
      * @return sukces
-     * @see IOException
+     * @throws IOException wyjątek
      */
     boolean connectPassive() throws IOException;
 
@@ -126,7 +128,7 @@ public interface IExplorer {
      * Metoda do połączenia w trybie aktywnym
      *
      * @return sukces
-     * @see IOException
+     * @throws IOException wyjątek
      */
     boolean connectActive() throws IOException;
 
@@ -135,7 +137,7 @@ public interface IExplorer {
      *
      * @param dir Nazwa katalogu
      * @return sukces
-     * @see IOException
+     * @throws IOException wyjątek
      */
     boolean mkdir(String dir) throws IOException;
 
@@ -145,7 +147,7 @@ public interface IExplorer {
      * @param oldFile Stara ścieżka z nazwą
      * @param newFile Nowa ścieżka z nazwą
      * @return sukces
-     * @see IOException
+     * @throws IOException wyjątek
      */
     boolean mv(String oldFile, String newFile) throws IOException;
 

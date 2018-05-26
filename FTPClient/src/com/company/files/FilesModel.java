@@ -169,6 +169,7 @@ public class FilesModel extends AbstractTableModel {
 
         /**
          * {@link FileCell#name}
+         * @return nazwa pliku
          */
         public String getName() {
             return name;
@@ -176,6 +177,7 @@ public class FilesModel extends AbstractTableModel {
 
         /**
          * {@link FileCell#directory}
+         * @return czy katalog
          */
         public boolean isDirectory() {
             return directory;

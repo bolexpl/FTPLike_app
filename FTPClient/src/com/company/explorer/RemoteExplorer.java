@@ -1,7 +1,6 @@
 package com.company.explorer;
 
 import com.company.Main;
-import com.company.server.files.*;
 import lib.ByteUtils;
 import lib.Protocol;
 import com.company.files.*;
@@ -58,7 +57,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda pobierająca aktualną ścieżkę z obiektu explorera
+     * {@inheritDoc}
      */
     @Override
     public String getDir() {
@@ -66,10 +65,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda zmieniająca aktualną ścieżkę w obiekcie explorera
-     *
-     * @param dir Ścieżka do katalogu
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public boolean setDir(String dir) throws IOException {
@@ -79,12 +75,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda służąca do kopiowania plików między katalogami.
-     * Metoda nie służy do pobierania i wysyłania plików.
-     *
-     * @param path1 Ścieżka źródłowa
-     * @param path2 Ścieżka docelowa
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public void copy(String path1, String path2) throws IOException {
@@ -93,9 +84,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda aktualizująca ścieżkę katalogu roboczego
-     *
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public void pwd() throws IOException {
@@ -105,11 +94,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda tworząca pusty plik
-     *
-     * @param name Nazwa nowego pliku
-     * @return sukces
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public boolean touch(String name) throws IOException {
@@ -119,12 +104,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda dopisująca ciąg znaków do pliku
-     *
-     * @param fileName Nazwa pliku
-     * @param data     Ciąg znaków
-     * @return sukces
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public boolean append(String fileName, String data) throws IOException {
@@ -135,7 +115,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda negująca wartość atrybutu hidden
+     * {@inheritDoc}
      */
     @Override
     public void invertHidden() {
@@ -143,10 +123,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do pobierania pliku z serwera
-     *
-     * @param path      Ścieżka zdalna
-     * @param localPath Ścieżka lokalna
+     * {@inheritDoc}
      */
     @Override
     public void get(String path, String localPath) {
@@ -163,10 +140,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do wysyłania pliku na serwer
-     *
-     * @param path      Ścieżka zdalna
-     * @param localPath Ścieżka lokalna
+     * {@inheritDoc}
      */
     @Override
     public void put(String path, String localPath) {
@@ -183,9 +157,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do otwierania katalogu
-     *
-     * @param directory Nazwa katalogu
+     * {@inheritDoc}
      */
     @Override
     public void cd(String directory) {
@@ -208,11 +180,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do usuwania pliku
-     *
-     * @param name Nazwa pliku
-     * @return sukces
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public boolean rm(String name) throws IOException {
@@ -223,9 +191,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda listująca katalog roboczy
-     *
-     * @return Lista elementów w katalogu
+     * {@inheritDoc}
      */
     @Override
     public List<FileInfo> listFiles() {
@@ -260,12 +226,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda służąca do logowania na serwerze
-     *
-     * @param login Login
-     * @param pass  Hasło
-     * @return sukces
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public boolean login(String login, String pass) throws IOException {
@@ -280,10 +241,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do połączenia w trybie pasywnym
-     *
-     * @return sukces
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public boolean connectPassive() throws IOException {
@@ -307,10 +265,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do połączenia w trybie aktywnym
-     *
-     * @return sukces
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public boolean connectActive() throws IOException {
@@ -333,11 +288,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do tworzenia katalogu
-     *
-     * @param dir Nazwa katalogu
-     * @return sukces
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public boolean mkdir(String dir) throws IOException {
@@ -348,12 +299,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda do przenoszenia i zmiany nazwy plików i katalogów
-     *
-     * @param oldFile Stara ścieżka z nazwą
-     * @param newFile Nowa ścieżka z nazwą
-     * @return sukces
-     * @see IOException
+     * {@inheritDoc}
      */
     @Override
     public boolean mv(String oldFile, String newFile) throws IOException {
@@ -364,7 +310,7 @@ public class RemoteExplorer implements IExplorer {
     }
 
     /**
-     * Metoda kończąca połączenie
+     * {@inheritDoc}
      */
     @Override
     public void disconnect() {
@@ -409,7 +355,7 @@ public class RemoteExplorer implements IExplorer {
      *
      * @param ascii true - tryb ASCII / false - tryb binarny
      * @return sukces
-     * @see IOException
+     * @throws IOException wyjątek
      */
     public boolean setTransfer(boolean ascii) throws IOException {
         this.ascii = ascii;
@@ -424,7 +370,7 @@ public class RemoteExplorer implements IExplorer {
     /**
      * Metoda łącząca strumienie
      *
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void connectStreams() throws IOException {
         if (ascii) {
@@ -445,7 +391,7 @@ public class RemoteExplorer implements IExplorer {
      * Metoda wysyłająca polecenia przez socket sterujący
      *
      * @param s Dane do wysłania
-     * @see IOException
+     * @throws IOException wyjątek
      */
     private void write(String s) throws IOException {
         writer.write(s);
@@ -674,7 +620,7 @@ public class RemoteExplorer implements IExplorer {
          * Metoda odbierająca plik w trybie ASCII
          *
          * @param f Plik do odebrania
-         * @see IOException
+         * @throws IOException wyjątek
          */
         private void receiveASCII(File f) throws IOException {
             BufferedWriter buff =
@@ -698,7 +644,7 @@ public class RemoteExplorer implements IExplorer {
          * Metoda odbierająca plik w trybie binarnym
          *
          * @param f Plik do odebrania
-         * @see IOException
+         * @throws IOException wyjątek
          */
         private void receiveBinary(File f) throws IOException {
             BufferedOutputStream buff =
