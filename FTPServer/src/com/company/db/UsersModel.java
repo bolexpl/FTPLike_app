@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Model dla tabeli użytkowników
- * */
+ */
 public class UsersModel extends AbstractTableModel {
 
     private List<User> list;
@@ -18,8 +18,9 @@ public class UsersModel extends AbstractTableModel {
 
     /**
      * Metoda odświeżająca dane w tabeli
+     *
      * @throws SQLException wyjątek
-     * */
+     */
     public void refresh() throws SQLException {
         list = SQLiteJDBC.getInstance().selectAll();
     }
@@ -72,9 +73,9 @@ public class UsersModel extends AbstractTableModel {
      */
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        if(columnIndex == 0){
+        if (columnIndex == 0) {
             return Integer.class;
-        }else{
+        } else {
             return String.class;
         }
     }

@@ -150,7 +150,15 @@ public class ClientThread extends Thread {
         String args[];
 
         while (connected) {
-            args = reader.readLine().split(" ");
+
+            String s = reader.readLine();
+
+            if (s == null) {
+                disconnect();
+                return;
+            } else
+                args = s.split(" ");
+
 
             if (args.length == 0) continue;
 
