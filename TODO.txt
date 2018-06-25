@@ -83,6 +83,7 @@ C:stara_ścieżka
 C:nowa_ścieżka
 S:OK
 
+
 tworzenie pliku:
 C:TOUCH
 C:plik

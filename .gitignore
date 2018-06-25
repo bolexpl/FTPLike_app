@@ -1,8 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Java template
 # Compiled class file
-*.class
-
 # Log file
 *.log
 
@@ -16,3 +14,4 @@ out/
 /FTPClient/FTPClient.iml
 /FTPServer/FTPServer.iml
 FTPServer/src/lib/
+FTPClient/src/com/company/server/
