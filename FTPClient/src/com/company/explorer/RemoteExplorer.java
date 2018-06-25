@@ -516,15 +516,14 @@ public class RemoteExplorer implements IExplorer {
             int k;
             byte[] data = new byte[Protocol.PACKET_LENGTH];
 
-            long size = f.length(), max = size;
+            long max = f.length();
             long current = 0;
-            send(ByteUtils.longToByte(size));
+            send(ByteUtils.longToByte(max));
 
-            while (size > 0) {
+            while (current < max) {
                 transferModel.setProgress(ti, (int) (((double) current / max) * 100.0));
                 k = buff.read(data, 0, Protocol.PACKET_LENGTH);
                 send(data, k);
-                size -= k;
                 current += k;
             }
 
@@ -678,14 +677,13 @@ public class RemoteExplorer implements IExplorer {
 
             byte[] bytes = new byte[Long.BYTES];
             k = in.read(bytes);
-            long size = ByteUtils.byteToLong(bytes), max = size;
+            long max = ByteUtils.byteToLong(bytes);
             long current = 0;
 
-            while (size > 0) {
+            while (current < max) {
                 transferModel.setProgress(ti, (int) (((double) current / max) * 100.0));
                 k = in.read(data);
                 buff.write(data, 0, k);
-                size -= k;
                 current += k;
             }
             buff.flush();
