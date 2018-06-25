@@ -1,2 +1,2 @@
 # FTPLike_app
-Client and server for own FTP-like protocol.
+Klient i serwer dla własnego protokołu przesyłu plików.

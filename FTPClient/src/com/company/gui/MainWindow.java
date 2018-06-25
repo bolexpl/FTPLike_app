@@ -55,6 +55,7 @@ public class MainWindow extends JFrame {
         ImageIcon folderIcon = new ImageIcon(getClass().getResource("/res/folder16.png"));
         ImageIcon fileIcon = new ImageIcon(getClass().getResource("/res/file16.png"));
 //        localExplorer = new LocalExplorer(System.getProperty("user.home"));
+//        TODO
         localExplorer = new LocalExplorer("/home/bolek/test/cl");
 
         contentPane = new JPanel();
@@ -154,6 +155,9 @@ public class MainWindow extends JFrame {
 
         addressField.setText("localhost");
         portField.setText("3000");
+//        TODO
+        userField.setText("a");
+        passwordField.setText("b");
 
         JButton connect = new JButton("Połącz");
         connect.addActionListener(e -> swap());
@@ -200,12 +204,7 @@ public class MainWindow extends JFrame {
         loggedLabel = new JLabel();
         logged.add(loggedLabel);
         JButton disconnect = new JButton("Odłącz");
-        disconnect.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                swap();
-            }
-        });
+        disconnect.addActionListener(e -> swap());
         logged.add(disconnect);
     }
 

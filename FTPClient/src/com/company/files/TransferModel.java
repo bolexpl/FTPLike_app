@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class TransferModel extends AbstractTableModel {
 
     private List<TransferInfo> list;
-    private final static String COLUMNS[] = {"Ścieżka lokalna", "Ścieżka zdalna", "Kierunek"};
+    private final static String COLUMNS[] = {"Ścieżka lokalna", "Ścieżka zdalna", "Kierunek", "Postęp"};
 
     public TransferModel() {
         this.list = new ArrayList<>();
@@ -40,6 +40,11 @@ public class TransferModel extends AbstractTableModel {
      */
     public void addTransfer(TransferInfo ti) {
         list.add(ti);
+        fireTableDataChanged();
+    }
+
+    public void setProgress(TransferInfo ti, int progress){
+        ti.setProgress(progress);
         fireTableDataChanged();
     }
 
@@ -106,6 +111,8 @@ public class TransferModel extends AbstractTableModel {
                     return "wysyłanie";
                 else
                     return "pobieranie";
+            case 3:
+                return ti.getProgress() + "%";
         }
 
         return ti;

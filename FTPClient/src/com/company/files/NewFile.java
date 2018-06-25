@@ -2,12 +2,13 @@ package com.company.files;
 
 /**
  * Klasa z informacjami do zapisywania nowego pliku
- * */
+ */
 public class NewFile {
 
     private String name;
     private String remotePath;
     private String localPath;
+    private TransferInfo ti;
 
     public NewFile(String name, String remotePath, String localPath) {
         this.name = name;
@@ -25,5 +26,13 @@ public class NewFile {
 
     public String getLocalPath() {
         return localPath;
+    }
+
+    public TransferInfo getTi() {
+        return ti;
+    }
+
+    public void setTi(TransferInfo ti) {
+        this.ti = ti;
     }
 }

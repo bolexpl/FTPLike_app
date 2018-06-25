@@ -54,6 +54,7 @@ public class ClientThread extends Thread {
         reader = new BufferedReader(new InputStreamReader(controlSocket.getInputStream()));
         writer = new BufferedWriter(new OutputStreamWriter(controlSocket.getOutputStream()));
 //        explorer = new LocalExplorer(System.getProperty("user.home"));
+//        TODO
         explorer = new LocalExplorer("/home/bolek/test/serv");
         start();
     }
@@ -226,9 +227,7 @@ public class ClientThread extends Thread {
                     break;
 
                 case Protocol.CP:
-                    if (args.length == 3) {
-                        copy(args[1], args[2]);
-                    } else write(Protocol.ERROR);
+                    copy(reader.readLine(), reader.readLine());
                     break;
 
                 case Protocol.TOUCH:
@@ -623,6 +622,8 @@ public class ClientThread extends Thread {
 
             String s;
 
+            send(Long.toString(f.length()));
+
             while ((s = buff.readLine()) != null) {
 
                 if (s.equals(Protocol.EOF)) {
@@ -782,6 +783,8 @@ public class ClientThread extends Thread {
             BufferedWriter buff =
                     new BufferedWriter(
                             new FileWriter(f));
+
+            long size = Long.parseLong(inASCII.readLine());
 
             String s;
             while (!(s = inASCII.readLine()).equals(Protocol.EOF)) {
