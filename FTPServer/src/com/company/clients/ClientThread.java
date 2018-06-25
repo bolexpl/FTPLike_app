@@ -53,7 +53,8 @@ public class ClientThread extends Thread {
 
         reader = new BufferedReader(new InputStreamReader(controlSocket.getInputStream()));
         writer = new BufferedWriter(new OutputStreamWriter(controlSocket.getOutputStream()));
-        explorer = new LocalExplorer(System.getProperty("user.home"));
+//        explorer = new LocalExplorer(System.getProperty("user.home"));
+        explorer = new LocalExplorer("/home/bolek/test/serv");
         start();
     }
 

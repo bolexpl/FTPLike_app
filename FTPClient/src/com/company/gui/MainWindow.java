@@ -54,7 +54,8 @@ public class MainWindow extends JFrame {
 
         ImageIcon folderIcon = new ImageIcon(getClass().getResource("/res/folder16.png"));
         ImageIcon fileIcon = new ImageIcon(getClass().getResource("/res/file16.png"));
-        localExplorer = new LocalExplorer(System.getProperty("user.home"));
+//        localExplorer = new LocalExplorer(System.getProperty("user.home"));
+        localExplorer = new LocalExplorer("/home/bolek/test/cl");
 
         contentPane = new JPanel();
         prepareTop();
