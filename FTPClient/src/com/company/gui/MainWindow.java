@@ -199,12 +199,7 @@ public class MainWindow extends JFrame {
         loggedLabel = new JLabel();
         logged.add(loggedLabel);
         JButton disconnect = new JButton("Odłącz");
-        disconnect.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                swap();
-            }
-        });
+        disconnect.addActionListener(e -> swap());
         logged.add(disconnect);
     }
 

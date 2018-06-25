@@ -79,7 +79,9 @@ public class RemoteExplorer implements IExplorer {
      */
     @Override
     public void copy(String path1, String path2) throws IOException {
-        write(Protocol.CP + " " + path1 + " " + path2);
+        write(Protocol.CP);
+        write(path1);
+        write(path2);
         if (reader.readLine().equals(Protocol.ERROR)) throw new IOException();
     }
 
@@ -129,14 +131,17 @@ public class RemoteExplorer implements IExplorer {
     public void get(String path, String localPath) {
 
         NewFile nf = new NewFile(path, dir, localPath);
-
-        dataReceiveThread.addFile(nf);
-
-        transferModel.addTransfer(new TransferInfo(
+        TransferInfo ti = new TransferInfo(
                 nf.getLocalPath() + "/" + nf.getName(),
                 nf.getRemotePath() + "/" + nf.getName(),
                 false
-        ));
+        );
+
+        nf.setTi(ti);
+
+        dataReceiveThread.addFile(nf);
+
+        transferModel.addTransfer(ti);
     }
 
     /**
@@ -146,14 +151,17 @@ public class RemoteExplorer implements IExplorer {
     public void put(String path, String localPath) {
 
         NewFile nf = new NewFile(path, dir, localPath);
-
-        dataSendThread.addFile(nf);
-
-        transferModel.addTransfer(new TransferInfo(
+        TransferInfo ti = new TransferInfo(
                 nf.getLocalPath() + "/" + nf.getName(),
                 nf.getRemotePath() + "/" + nf.getName(),
                 true
-        ));
+        );
+
+        nf.setTi(ti);
+
+        dataSendThread.addFile(nf);
+
+        transferModel.addTransfer(ti);
     }
 
     /**
@@ -445,9 +453,9 @@ public class RemoteExplorer implements IExplorer {
                         if (reader.readLine().equals(Protocol.OK)) {
 
                             if (ascii) {
-                                sendASCII(f);
+                                sendASCII(f, nf.getTi());
                             } else {
-                                sendBinary(f);
+                                sendBinary(f, nf.getTi());
                             }
 
                             transferModel.remove(
@@ -470,13 +478,19 @@ public class RemoteExplorer implements IExplorer {
          * @param f Plik do wysłania
          * @throws IOException wyjątek
          */
-        private void sendASCII(File f) throws IOException {
+        private void sendASCII(File f, TransferInfo ti) throws IOException {
             BufferedReader buff =
                     new BufferedReader(
                             new FileReader(f));
 
+            long size = f.length();
+            long current = 0;
+            send(Long.toString(size));
+
             String s;
             while ((s = buff.readLine()) != null) {
+                transferModel.setProgress(ti, (int) (((double) current / size) * 100.0));
+                current += s.length();
                 if (s.equals(Protocol.EOF)) {
                     send("\\" + s);
                 } else {
@@ -494,7 +508,7 @@ public class RemoteExplorer implements IExplorer {
          * @param f Plik do wysłania
          * @throws IOException wyjątek
          */
-        private void sendBinary(File f) throws IOException {
+        private void sendBinary(File f, TransferInfo ti) throws IOException {
 
             BufferedInputStream buff =
                     new BufferedInputStream(new FileInputStream(f));
@@ -502,13 +516,15 @@ public class RemoteExplorer implements IExplorer {
             int k;
             byte[] data = new byte[Protocol.PACKET_LENGTH];
 
-            long size = f.length();
-            send(ByteUtils.longToByte(size));
+            long max = f.length();
+            long current = 0;
+            send(ByteUtils.longToByte(max));
 
-            while (size > 0) {
+            while (current < max) {
+                transferModel.setProgress(ti, (int) (((double) current / max) * 100.0));
                 k = buff.read(data, 0, Protocol.PACKET_LENGTH);
                 send(data, k);
-                size -= k;
+                current += k;
             }
 
             buff.close();
@@ -595,9 +611,9 @@ public class RemoteExplorer implements IExplorer {
                         if (reader.readLine().equals(Protocol.OK)) {
 
                             if (ascii) {
-                                receiveASCII(f);
+                                receiveASCII(f, nf.getTi());
                             } else {
-                                receiveBinary(f);
+                                receiveBinary(f, nf.getTi());
                             }
 
                             transferModel.remove(nf.getLocalPath() + "/" + nf.getName()
@@ -622,19 +638,24 @@ public class RemoteExplorer implements IExplorer {
          * @param f Plik do odebrania
          * @throws IOException wyjątek
          */
-        private void receiveASCII(File f) throws IOException {
+        private void receiveASCII(File f, TransferInfo ti) throws IOException {
             BufferedWriter buff =
                     new BufferedWriter(
                             new FileWriter(f));
 
+            long size = Long.parseLong(inASCII.readLine());
+            long current = 0;
+
             String s;
             while (!(s = inASCII.readLine()).equals(Protocol.EOF)) {
+                transferModel.setProgress(ti, (int) (((double) current / size) * 100.0));
                 if (s.equals("\\" + Protocol.EOF))
                     buff.write(s.substring(1, s.length()));
                 else
                     buff.write(s);
                 buff.newLine();
                 buff.flush();
+                current += s.length();
             }
 
             buff.close();
@@ -646,7 +667,7 @@ public class RemoteExplorer implements IExplorer {
          * @param f Plik do odebrania
          * @throws IOException wyjątek
          */
-        private void receiveBinary(File f) throws IOException {
+        private void receiveBinary(File f, TransferInfo ti) throws IOException {
             BufferedOutputStream buff =
                     new BufferedOutputStream(
                             new FileOutputStream(f));
@@ -656,12 +677,14 @@ public class RemoteExplorer implements IExplorer {
 
             byte[] bytes = new byte[Long.BYTES];
             k = in.read(bytes);
-            long size = ByteUtils.byteToLong(bytes);
+            long max = ByteUtils.byteToLong(bytes);
+            long current = 0;
 
-            while (size > 0) {
+            while (current < max) {
+                transferModel.setProgress(ti, (int) (((double) current / max) * 100.0));
                 k = in.read(data);
                 buff.write(data, 0, k);
-                size -= k;
+                current += k;
             }
             buff.flush();
 
