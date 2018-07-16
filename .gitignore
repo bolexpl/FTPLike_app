@@ -14,4 +14,4 @@ out/
 /FTPClient/FTPClient.iml
 /FTPServer/FTPServer.iml
 FTPServer/src/lib/
-FTPClient/src/com/company/server/
+FTPClient/src/com/com.company/server/
