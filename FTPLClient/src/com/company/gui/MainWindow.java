@@ -13,6 +13,7 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.URL;
 
 /**
  * Klasa głównego okna
@@ -51,6 +52,10 @@ public class MainWindow extends JFrame {
 
     public MainWindow() {
         super("FTP-like Client");
+
+        URL url = getClass().getResource("/res/ftpl_launcher_big.png");
+        Image img = Toolkit.getDefaultToolkit().createImage(url);
+        setIconImage(img);
 
         ImageIcon folderIcon = new ImageIcon(getClass().getResource("/res/folder16.png"));
         ImageIcon fileIcon = new ImageIcon(getClass().getResource("/res/file16.png"));
