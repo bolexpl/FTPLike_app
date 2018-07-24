@@ -6,7 +6,8 @@ import lib.Protocol;
 
 import java.awt.*;
 import java.io.*;
-import java.net.ServerSocket;
+import java.net.*;
+import java.util.Enumeration;
 
 /**
  * <h1>Serwer FTPL</h1>
@@ -17,13 +18,26 @@ import java.net.ServerSocket;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SocketException {
 //        try {
 //            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 //        } catch (Exception e) {
 //            System.err.println("Nie udała się zmiana wyglądu: ");
 //        }
+
         EventQueue.invokeLater(MainWindow::new);
+
+//        Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
+//
+//        for (; n.hasMoreElements(); ) {
+//            NetworkInterface e = n.nextElement();
+//            Enumeration<InetAddress> a = e.getInetAddresses();
+//            for (; a.hasMoreElements(); ) {
+//                InetAddress ip = a.nextElement();
+//
+//                System.out.println(ip.getHostAddress());
+//            }
+//        }
     }
 
     /**

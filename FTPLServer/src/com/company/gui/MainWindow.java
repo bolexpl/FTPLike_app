@@ -11,8 +11,8 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.URL;
+import java.net.*;
+import java.util.Enumeration;
 
 /**
  * Klasa głównego okna
@@ -118,6 +118,23 @@ public class MainWindow extends JFrame {
             thread.start();
             start.setText("Zakończ");
             addColoredText("Server started at port " + Integer.toString(port), Color.BLACK);
+            addColoredText("Available addresses:", Color.BLACK);
+
+            try {
+                Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
+                for (; n.hasMoreElements(); ) {
+                    NetworkInterface e = n.nextElement();
+                    Enumeration<InetAddress> a = e.getInetAddresses();
+                    String i = a.nextElement().toString().split("%")[1];
+                    String ipv4 = a.nextElement().toString();
+
+                    addColoredText(i, Color.BLACK);
+                    addColoredText(ipv4, Color.BLACK);
+                    addColoredText("-------------", Color.BLACK);
+                }
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
         }
         running = !running;
     }
