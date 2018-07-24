@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.URL;
 
 /**
  * Klasa głównego okna
@@ -27,6 +28,11 @@ public class MainWindow extends JFrame {
 
     public MainWindow() {
         super("FTP-like Server");
+
+        URL url = getClass().getResource("/res/ftpl_server.png");
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Image img = toolkit.createImage(url);
+        setIconImage(img);
 
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
