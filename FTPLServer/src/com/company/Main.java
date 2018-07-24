@@ -26,18 +26,6 @@ public class Main {
 //        }
 
         EventQueue.invokeLater(MainWindow::new);
-
-//        Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
-//
-//        for (; n.hasMoreElements(); ) {
-//            NetworkInterface e = n.nextElement();
-//            Enumeration<InetAddress> a = e.getInetAddresses();
-//            for (; a.hasMoreElements(); ) {
-//                InetAddress ip = a.nextElement();
-//
-//                System.out.println(ip.getHostAddress());
-//            }
-//        }
     }
 
     /**
