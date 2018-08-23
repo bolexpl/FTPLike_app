@@ -176,32 +176,11 @@ public class LocalExplorer {
         File[] files;
         File[] dirs;
         if (showHidden) {
-            files = path.listFiles(new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    return pathname.isDirectory();
-                }
-            });
-            dirs = path.listFiles(new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    return !pathname.isDirectory();
-                }
-            });
-
+            files = path.listFiles(File::isDirectory);
+            dirs = path.listFiles(pathname -> !pathname.isDirectory());
         } else {
-            files = path.listFiles(new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    return !pathname.isHidden() && pathname.isDirectory();
-                }
-            });
-            dirs = path.listFiles(new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    return !pathname.isHidden() && !pathname.isDirectory();
-                }
-            });
+            files = path.listFiles(pathname -> !pathname.isHidden() && pathname.isDirectory());
+            dirs = path.listFiles(pathname -> !pathname.isHidden() && !pathname.isDirectory());
         }
 
         ArrayList<File> list = new ArrayList<>();
