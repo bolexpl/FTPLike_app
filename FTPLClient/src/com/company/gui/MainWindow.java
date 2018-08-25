@@ -242,13 +242,25 @@ public class MainWindow extends JFrame {
                         dir.clearSelection();
                     }
                 }
+                int x = dir.getSelectedRow();
 
                 //dwuklik
-                if (e.getClickCount() == 2 && dir.getSelectedRow() != -1) {
-                    if (local) {
-                        open(localExplorer, localDir, localPath, localModel);
+                if (e.getClickCount() == 2 && x != -1) {
+
+                    FilesModel.FileCell cell = (FilesModel.FileCell) dir.getValueAt(x, 0);
+
+                    if (cell.isDirectory()) {
+                        if (local) {
+                            open(localExplorer, localDir, localPath, localModel);
+                        } else {
+                            open(remoteExplorer, remoteDir, remotePath, remoteModel);
+                        }
                     } else {
-                        open(remoteExplorer, remoteDir, remotePath, remoteModel);
+                        if (local && isLogged) {
+                            put();
+                        } else if(isLogged){
+                            get();
+                        }
                     }
                 }
             }
