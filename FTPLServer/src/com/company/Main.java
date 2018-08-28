@@ -18,12 +18,43 @@ import java.util.Enumeration;
  */
 public class Main {
 
-    public static void main(String[] args) throws SocketException {
+    public static boolean debug = false;
+    public static String path;
+
+    public static void main(String[] args) {
 //        try {
 //            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 //        } catch (Exception e) {
 //            System.err.println("Nie udała się zmiana wyglądu: ");
 //        }
+
+        if (args.length > 0) {
+            for (int i = 0; i < args.length; i++) {
+                switch (args[i]) {
+                    case "-d":
+                    case "--debug":
+                        debug = true;
+                        break;
+                    case "-r":
+                    case "--root":
+                        i++;
+                        if (i == args.length) {
+                            System.out.println("Złe argumenty");
+                            System.exit(0);
+                        }
+                        path = args[i];
+                        break;
+                    case "-h":
+                    case "--help":
+                        System.out.println("Serwer protokołu FTPL");
+                        System.out.println("Argumenty opcjonalne:");
+                        System.out.println("-h   --help      wyświetlenie ekranu pomocy");
+                        System.out.println("-d   --debug     tryb debugowania");
+                        System.out.println("-r   --root      ustawienie ścieżki początkowej");
+                        break;
+                }
+            }
+        }
 
         EventQueue.invokeLater(MainWindow::new);
     }
