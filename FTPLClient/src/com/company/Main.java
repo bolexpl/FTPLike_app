@@ -3,6 +3,7 @@ package com.company;
 import com.company.gui.MainWindow;
 import lib.Protocol;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
@@ -17,7 +18,30 @@ import java.net.*;
 public class Main {
 
     public static void main(String[] args) {
-        gui();
+
+        if (args.length > 0) {
+            for (String arg : args) {
+                switch (arg) {
+                    case "-s":
+                    case "--system":
+                        try {
+                            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                        } catch (Exception e) {
+                            System.err.println("Nie udała się zmiana wyglądu: ");
+                        }
+                        break;
+                    case "-h":
+                    case "--help":
+                        System.out.println("Serwer protokołu FTPL");
+                        System.out.println("Argumenty opcjonalne:");
+                        System.out.println("-h   --help      wyświetlenie ekranu pomocy");
+                        System.out.println("-s   --system    systemowy wygląd okien");
+                        System.exit(0);
+                }
+            }
+        }
+
+        EventQueue.invokeLater(MainWindow::new);
     }
 
     /**
@@ -60,17 +84,5 @@ public class Main {
     public static boolean isAccess(String dir) {
         File f = new File(dir);
         return f.exists() && f.isDirectory() && f.canRead() && f.canExecute();
-    }
-
-    /**
-     * Metoda tworząca interfejs graficzny.
-     */
-    private static void gui() {
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//        } catch (Exception e) {
-//            System.err.println("Nie udała się zmiana wyglądu: ");
-//        }
-        EventQueue.invokeLater(MainWindow::new);
     }
 }

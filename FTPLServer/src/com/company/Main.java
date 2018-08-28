@@ -1,13 +1,12 @@
 package com.company;
 
 import com.company.gui.MainWindow;
-import lib.Base64Coder;
 import lib.Protocol;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
-import java.util.Enumeration;
 
 /**
  * <h1>Serwer FTPL</h1>
@@ -22,11 +21,7 @@ public class Main {
     public static String path;
 
     public static void main(String[] args) {
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//        } catch (Exception e) {
-//            System.err.println("Nie udała się zmiana wyglądu: ");
-//        }
+
 
         if (args.length > 0) {
             for (int i = 0; i < args.length; i++) {
@@ -37,12 +32,19 @@ public class Main {
                         break;
                     case "-r":
                     case "--root":
-                        i++;
-                        if (i == args.length) {
+                        if (++i == args.length) {
                             System.out.println("Złe argumenty");
                             System.exit(0);
                         }
                         path = args[i];
+                        break;
+                    case "-s":
+                    case "--system":
+                        try {
+                            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                        } catch (Exception e) {
+                            System.err.println("Nie udała się zmiana wyglądu: ");
+                        }
                         break;
                     case "-h":
                     case "--help":
@@ -51,7 +53,8 @@ public class Main {
                         System.out.println("-h   --help      wyświetlenie ekranu pomocy");
                         System.out.println("-d   --debug     tryb debugowania");
                         System.out.println("-r   --root      ustawienie ścieżki początkowej");
-                        break;
+                        System.out.println("-s   --system    systemowy wygląd okien");
+                        System.exit(0);
                 }
             }
         }
