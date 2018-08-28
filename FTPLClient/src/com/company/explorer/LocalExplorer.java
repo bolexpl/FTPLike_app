@@ -119,9 +119,12 @@ public class LocalExplorer implements IExplorer {
      */
     @Override
     public void cd(String directory) {
-        if (directory.equals(".."))
-            dir = (new File(dir)).getParent();
-        else {
+        if (directory.equals("..")) {
+            String s = (new File(dir)).getParent();
+            if(s != null) {
+                dir = s;
+            }
+        } else {
             if (dir.charAt(dir.length() - 1) != '/')
                 dir += "/";
             dir += directory;

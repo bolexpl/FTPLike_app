@@ -67,7 +67,7 @@ public class LocalExplorer {
             String[] entries = f.list();
             if (entries != null) {
                 for (String s : entries) {
-                    rm(name+"/"+s);
+                    rm(name + "/" + s);
                 }
             }
         }
@@ -115,7 +115,8 @@ public class LocalExplorer {
      * @return sukces
      */
     public boolean cdParent() {
-        dir = (new File(dir)).getParent();
+        String s = (new File(dir)).getParent();
+        if (s != null) dir = s;
         return Main.isAccess(dir);
     }
 
