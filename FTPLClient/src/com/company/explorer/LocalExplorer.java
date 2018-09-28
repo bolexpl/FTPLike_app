@@ -1,7 +1,7 @@
 package com.company.explorer;
 
-import com.company.Main;
 import com.company.files.FileInfo;
+import lib.Utils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -40,8 +40,11 @@ public class LocalExplorer implements IExplorer {
      */
     @Override
     public boolean setDir(String dir) {
-        this.dir = dir;
-        return Main.isAccess(dir);
+        if (Utils.isAccess(dir)) {
+            this.dir = dir;
+            return true;
+        }
+        return false;
     }
 
     /**

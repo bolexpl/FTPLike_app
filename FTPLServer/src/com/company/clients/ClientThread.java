@@ -3,7 +3,7 @@ package com.company.clients;
 import com.company.Main;
 import com.company.NewFile;
 import com.company.explorer.LocalExplorer;
-import lib.ByteUtils;
+import lib.Utils;
 import lib.Protocol;
 import com.company.db.SQLiteJDBC;
 import com.company.db.User;
@@ -259,7 +259,7 @@ public class ClientThread extends Thread {
         Random rand = new Random();
         do {
             x = rand.nextInt(Protocol.MAX_PORT_NUMBER);
-        } while (!Main.isPortAvailable(x));
+        } while (!Utils.isPortAvailable(x));
 
         ServerSocket serverSocket = new ServerSocket(x);
         write(Protocol.PORT + " " + x);
@@ -655,7 +655,7 @@ public class ClientThread extends Thread {
             byte[] data = new byte[Protocol.PACKET_LENGTH];
 
             long size = f.length();
-            send(ByteUtils.longToByte(size));
+            send(Utils.longToByte(size));
 
             while (size > 0) {
                 k = buff.read(data, 0, Protocol.PACKET_LENGTH);
@@ -821,7 +821,7 @@ public class ClientThread extends Thread {
 
             byte[] bytes = new byte[Long.BYTES];
             k = in.read(bytes);
-            long size = ByteUtils.byteToLong(bytes);
+            long size = Utils.byteToLong(bytes);
 
             while (size > 0) {
                 k = in.read(data);

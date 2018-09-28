@@ -1,6 +1,6 @@
 package com.company.explorer;
 
-import com.company.Main;
+import lib.Utils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -35,7 +35,7 @@ public class LocalExplorer {
      * @return sukces
      */
     public boolean setDir(String dir) {
-        if (Main.isAccess(dir)) {
+        if (Utils.isAccess(dir)) {
             this.dir = dir;
             return true;
         }
@@ -52,7 +52,7 @@ public class LocalExplorer {
         if (dir.charAt(dir.length() - 1) != '/')
             dir += "/";
         dir += directory;
-        return Main.isAccess(dir);
+        return Utils.isAccess(dir);
     }
 
     /**
@@ -120,7 +120,7 @@ public class LocalExplorer {
     public boolean cdParent() {
         String s = (new File(dir)).getParent();
         if (s != null) dir = s;
-        return Main.isAccess(dir);
+        return Utils.isAccess(dir);
     }
 
     /**

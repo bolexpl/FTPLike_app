@@ -1,7 +1,6 @@
 package com.company.explorer;
 
-import com.company.Main;
-import lib.ByteUtils;
+import lib.Utils;
 import lib.Protocol;
 import com.company.files.*;
 import lib.Alert;
@@ -279,7 +278,7 @@ public class RemoteExplorer implements IExplorer {
         Random rand = new Random();
         do {
             x = rand.nextInt(Protocol.MAX_PORT_NUMBER);
-        } while (!Main.isPortAvailable(x));
+        } while (!Utils.isPortAvailable(x));
 
         ServerSocket serverSocket = new ServerSocket(x);
         write(Protocol.ACTIVE + " " + x);
@@ -516,7 +515,7 @@ public class RemoteExplorer implements IExplorer {
 
             long max = f.length();
             long current = 0;
-            send(ByteUtils.longToByte(max));
+            send(Utils.longToByte(max));
 
             while (current < max) {
                 transferModel.setProgress(ti, (int) (((double) current / max) * 100.0));
@@ -648,7 +647,7 @@ public class RemoteExplorer implements IExplorer {
             while (!(s = inASCII.readLine()).equals(Protocol.EOF)) {
                 transferModel.setProgress(ti, (int) (((double) current / size) * 100.0));
                 if (s.equals("\\" + Protocol.EOF))
-                    buff.write(s.substring(1, s.length()));
+                    buff.write(s.substring(1));
                 else
                     buff.write(s);
                 buff.newLine();
@@ -675,7 +674,7 @@ public class RemoteExplorer implements IExplorer {
 
             byte[] bytes = new byte[Long.BYTES];
             k = in.read(bytes);
-            long max = ByteUtils.byteToLong(bytes);
+            long max = Utils.byteToLong(bytes);
             long current = 0;
 
             while (current < max) {
