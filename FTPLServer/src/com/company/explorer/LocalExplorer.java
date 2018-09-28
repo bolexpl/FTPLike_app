@@ -35,8 +35,11 @@ public class LocalExplorer {
      * @return sukces
      */
     public boolean setDir(String dir) {
-        this.dir = dir;
-        return Main.isAccess(dir);
+        if (Main.isAccess(dir)) {
+            this.dir = dir;
+            return true;
+        }
+        return false;
     }
 
     /**
