@@ -1,5 +1,7 @@
 package com.company.db;
 
+import com.company.Main;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ public class SQLiteJDBC {
     private SQLiteJDBC() {
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:base.db");
+            c = DriverManager.getConnection("jdbc:sqlite:"+ Main.database);
             statement = c.createStatement();
             createTable();
         } catch (Exception e) {

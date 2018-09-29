@@ -19,6 +19,7 @@ public class Main {
 
     public static boolean debug = false;
     public static String path;
+    public static String database = "base.db";
 
     public static void main(String[] args) {
 
@@ -43,17 +44,30 @@ public class Main {
                         try {
                             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                         } catch (Exception e) {
-                            System.err.println("Nie udała się zmiana wyglądu: ");
+                            System.err.println("Nie udała się zmiana wyglądu.");
                         }
+                        break;
+                    case "-b":
+                    case "--database":
+                        if (++i == args.length) {
+                            System.out.println("Złe argumenty");
+                            System.exit(0);
+                        }
+                        String[] var = database.split("\\.");
+                        if (var[var.length - 1].equals("db"))
+                            database = args[i];
+                        else
+                            database = args[i]+".db";
                         break;
                     case "-h":
                     case "--help":
                         System.out.println("Serwer protokołu FTPL");
                         System.out.println("Argumenty opcjonalne:");
-                        System.out.println("-h   --help      wyświetlenie ekranu pomocy");
-                        System.out.println("-d   --debug     tryb debugowania");
-                        System.out.println("-r   --root      ustawienie ścieżki początkowej");
-                        System.out.println("-s   --system    systemowy wygląd okien");
+                        System.out.println("-h       --help               wyświetlenie ekranu pomocy");
+                        System.out.println("-d       --debug              tryb debugowania");
+                        System.out.println("-r       --root               ustawienie ścieżki początkowej");
+                        System.out.println("-s       --system             systemowy wygląd okien");
+                        System.out.println("-b <plik>  --database <plik>  plik bazy danych");
                         System.exit(0);
                 }
             }
