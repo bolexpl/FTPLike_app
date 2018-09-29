@@ -62,7 +62,6 @@ public class LocalExplorer implements IExplorer {
      */
     @Override
     public void pwd() {
-
     }
 
     /**
@@ -123,14 +122,21 @@ public class LocalExplorer implements IExplorer {
     @Override
     public void cd(String directory) {
         if (directory.equals("..")) {
-            String s = (new File(dir)).getParent();
-            if(s != null) {
+            String s = new File(dir).getParent();
+            if (s != null && Utils.isAccess(s)) {
                 dir = s;
             }
         } else {
-            if (dir.charAt(dir.length() - 1) != '/')
-                dir += "/";
-            dir += directory;
+//            if (dir.charAt(dir.length() - 1) != '/')
+//                dir += "/";
+//            dir += directory;
+
+            String s = (dir.charAt(dir.length() - 1) != '/') ?
+                    dir + "/" + directory : dir + directory;
+
+            if (Utils.isAccess(s)) {
+                dir = s;
+            }
         }
     }
 

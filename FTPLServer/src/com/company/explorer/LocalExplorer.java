@@ -49,10 +49,13 @@ public class LocalExplorer {
      * @return sukces
      */
     public boolean cd(String directory) {
-        if (dir.charAt(dir.length() - 1) != '/')
-            dir += "/";
-        dir += directory;
-        return Utils.isAccess(dir);
+        String s = (dir.charAt(dir.length() - 1) != '/') ?
+                dir+"/"+directory : dir + directory;
+
+        if (Utils.isAccess(s)) {
+            dir = s;
+        }
+        return Utils.isAccess(s);
     }
 
     /**
@@ -118,9 +121,11 @@ public class LocalExplorer {
      * @return sukces
      */
     public boolean cdParent() {
-        String s = (new File(dir)).getParent();
-        if (s != null) dir = s;
-        return Utils.isAccess(dir);
+        String s = new File(dir).getParent();
+        if (s != null && Utils.isAccess(s)) {
+            dir = s;
+        }
+        return Utils.isAccess(s);
     }
 
     /**
