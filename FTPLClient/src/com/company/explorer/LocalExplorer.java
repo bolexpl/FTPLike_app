@@ -127,9 +127,6 @@ public class LocalExplorer implements IExplorer {
                 dir = s;
             }
         } else {
-//            if (dir.charAt(dir.length() - 1) != '/')
-//                dir += "/";
-//            dir += directory;
 
             String s = (dir.charAt(dir.length() - 1) != '/') ?
                     dir + "/" + directory : dir + directory;
