@@ -24,6 +24,7 @@ import java.util.Random;
 public class ClientThread extends Thread {
 
     private String login;
+    private List<ClientThread> list;
     private ClientsModel model;
 
     private Socket controlSocket;
@@ -45,11 +46,16 @@ public class ClientThread extends Thread {
     private boolean ascii = true;
     private boolean connected = true;
 
-    public ClientThread(Socket controlSocket, MainWindow window, ClientsModel model)
+    public ClientThread(Socket controlSocket, List<ClientThread> list) throws IOException {
+        new ClientThread(controlSocket, null, null, list);
+    }
+
+    public ClientThread(Socket controlSocket, MainWindow window, ClientsModel model, List<ClientThread> list)
             throws IOException {
         this.controlSocket = controlSocket;
         this.window = window;
         this.model = model;
+        this.list = list;
 
         reader = new BufferedReader(new InputStreamReader(controlSocket.getInputStream()));
         writer = new BufferedWriter(new OutputStreamWriter(controlSocket.getOutputStream()));
@@ -120,7 +126,9 @@ public class ClientThread extends Thread {
                     }
 
                     write(Protocol.OK);
-                    model.add(this);
+                    this.list.add(this);
+                    if (model != null)
+                        model.fireTableDataChanged();
                     return true;
                 } catch (SQLException e) {
                     write(Protocol.ERROR);
@@ -476,7 +484,6 @@ public class ClientThread extends Thread {
      * @throws IOException wyjątek
      */
     private void write(String s) throws IOException {
-        System.out.println(s);
         writer.write(s);
         writer.newLine();
         writer.flush();
@@ -515,7 +522,7 @@ public class ClientThread extends Thread {
     /**
      * Metoda kończąca połączenie
      */
-    void disconnect() {
+    public void disconnect() {
         try {
             connected = false;
 
@@ -548,8 +555,11 @@ public class ClientThread extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        model.remove(this);
-        window.addColoredText("Disconnected " + controlSocket.getInetAddress().getHostAddress(), Color.RED);
+        list.remove(this);
+        if (model != null)
+            model.fireTableDataChanged();
+        if (window != null)
+            window.addColoredText("Disconnected " + controlSocket.getInetAddress().getHostAddress(), Color.RED);
     }
 
     @Override

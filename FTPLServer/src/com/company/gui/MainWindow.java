@@ -1,7 +1,7 @@
 package com.company.gui;
 
-import com.company.clients.ClientThread;
 import com.company.clients.ClientsModel;
+import com.company.server.ServerThread;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -10,7 +10,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.net.*;
 import java.util.Enumeration;
 
@@ -28,7 +27,6 @@ public class MainWindow extends JFrame {
 
     public MainWindow() {
         super("FTP-like Server");
-
         URL url = getClass().getResource("/res/ftpl_server.png");
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image img = toolkit.createImage(url);
@@ -52,7 +50,6 @@ public class MainWindow extends JFrame {
         table.setPreferredScrollableViewportSize(new Dimension(500, 150));
         JScrollPane tableScroll = new JScrollPane(table);
         tableScroll.setPreferredSize(new Dimension(500, 150));
-
 
         add(contentPane);
         contentPane.add(top, BorderLayout.NORTH);
@@ -114,7 +111,7 @@ public class MainWindow extends JFrame {
         } else {
             portField.setEnabled(false);
             int port = Integer.parseInt(portField.getText());
-            ServerThread thread = new ServerThread(port, this);
+            ServerThread thread = new ServerThread(port, this, model, model.getList());
             thread.start();
             start.setText("Zakończ");
             addColoredText("Server started at port " + Integer.toString(port), Color.BLACK);
@@ -122,7 +119,7 @@ public class MainWindow extends JFrame {
 
             try {
                 Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
-                for (; n.hasMoreElements(); ) {
+                while (n.hasMoreElements()) {
                     NetworkInterface e = n.nextElement();
                     Enumeration<InetAddress> a = e.getInetAddresses();
                     String i = a.nextElement().toString().split("%")[1];
@@ -156,38 +153,5 @@ public class MainWindow extends JFrame {
             e.printStackTrace();
         }
         scroll.setValue(scroll.getMaximum());
-    }
-
-    /**
-     * Klasa wątku serwerowego
-     */
-    class ServerThread extends Thread {
-
-        private int port;
-        MainWindow window;
-
-        ServerThread(int port, MainWindow window) {
-            this.port = port;
-            this.window = window;
-        }
-
-        @Override
-        public void run() {
-            try {
-                ServerSocket serverSocket = new ServerSocket(port);
-                while (true) {
-                    ClientThread clientThread =
-                            new ClientThread(serverSocket.accept(), window, model);
-
-                    addColoredText("Connection from " + clientThread
-                            .getControlSocket()
-                            .getInetAddress()
-                            .getHostAddress(), Color.GREEN);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

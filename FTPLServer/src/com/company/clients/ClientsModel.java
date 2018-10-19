@@ -106,4 +106,8 @@ public class ClientsModel extends AbstractTableModel {
         }
         return null;
     }
+
+    public List<ClientThread> getList() {
+        return list;
+    }
 }

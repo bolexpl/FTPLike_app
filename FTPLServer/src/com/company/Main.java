@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.gui.CommandLine;
 import com.company.gui.MainWindow;
 import lib.Protocol;
 
@@ -57,65 +58,37 @@ public class Main {
                         if (var[var.length - 1].equals("db"))
                             database = args[i];
                         else
-                            database = args[i]+".db";
+                            database = args[i] + ".db";
                         break;
+                    case "-n":
+                    case "--no-gui":
+                        cmd();
+                        return;
                     case "-h":
                     case "--help":
                         System.out.println("Serwer protokołu FTPL");
                         System.out.println("Argumenty opcjonalne:");
-                        System.out.println("-h       --help               wyświetlenie ekranu pomocy");
-                        System.out.println("-d       --debug              tryb debugowania");
-                        System.out.println("-r       --root               ustawienie ścieżki początkowej");
-                        System.out.println("-s       --system             systemowy wygląd okien");
+                        System.out.println("-h         --help             wyświetlenie ekranu pomocy");
+                        System.out.println("-d         --debug            tryb debugowania");
+                        System.out.println("-r         --root             ustawienie ścieżki początkowej");
+                        System.out.println("-s         --system           systemowy wygląd okien");
                         System.out.println("-b <plik>  --database <plik>  plik bazy danych");
+                        System.out.println("-n         --no-gui           plik bazy danych");
                         System.exit(0);
                 }
             }
         }
-
-        EventQueue.invokeLater(MainWindow::new);
+        EventQueue.invokeLater(() -> {
+            try {
+                new MainWindow();
+            } catch (HeadlessException e) {
+//                System.out.println("Code Error");
+                cmd();
+            }
+        });
     }
 
-//    /**
-//     * Metoda sprawdzająca czy jest dostęp do katalogu.
-//     *
-//     * @param dir Ścieżka do katalogu
-//     * @return Czy dostępny katalog
-//     */
-//    public static boolean isAccess(String dir) {
-//        File f = new File(dir);
-//        return f.exists() && f.isDirectory() && f.canRead() && f.canExecute();
-//    }
-
-//    /**
-//     * Metoda sprawdzająca czy port jest dostępny do użycia.
-//     *
-//     * @param port Numer portu
-//     * @return Czy dostępny port
-//     */
-//    public static boolean isPortAvailable(int port) {
-//
-//        if (port < Protocol.MIN_PORT_NUMBER || port > Protocol.MAX_PORT_NUMBER) {
-//            return false;
-//        }
-//
-//        ServerSocket ss = null;
-//        try {
-//            ss = new ServerSocket(port);
-//            ss.setReuseAddress(true);
-//            return true;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (ss != null) {
-//                try {
-//                    ss.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//
-//        return false;
-//    }
+    private static void cmd(){
+        new CommandLine();
+    }
 }
