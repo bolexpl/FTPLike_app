@@ -49,14 +49,15 @@ public class CommandLine {
                     else
                         System.exit(0);
                     break;
-                case "conlist":
+                case "con":
 
+                    System.out.println("------------------");
                     for (ClientThread cl : list) {
                         System.out.println(cl.getName());
                     }
                     System.out.println("------------------");
                     break;
-                case "dblist":
+                case "db":
                     try {
                         List<User> l = SQLiteJDBC.getInstance().selectAll();
                         for (User u : l) {
@@ -97,8 +98,8 @@ public class CommandLine {
                     break;
                 case "help":
                     System.out.println("start         - uruchomienie serwera");
-                    System.out.println("conlist       - lista podłączonych klientów");
-                    System.out.println("dblist        - lista użytkowników w bazie");
+                    System.out.println("con           - lista podłączonych klientów");
+                    System.out.println("db            - lista użytkowników w bazie");
                     System.out.println("add           - zarejestrowanie użytkownika");
                     System.out.println("help          - wyświetlenie pomocy");
                     System.out.println("q, quit, exit - wyjście");
