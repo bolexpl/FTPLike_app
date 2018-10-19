@@ -46,10 +46,6 @@ public class ClientThread extends Thread {
     private boolean ascii = true;
     private boolean connected = true;
 
-    public ClientThread(Socket controlSocket, List<ClientThread> list) throws IOException {
-        new ClientThread(controlSocket, null, null, list);
-    }
-
     public ClientThread(Socket controlSocket, MainWindow window, ClientsModel model, List<ClientThread> list)
             throws IOException {
         this.controlSocket = controlSocket;
@@ -111,7 +107,9 @@ public class ClientThread extends Thread {
             login = args[1];
             write(Protocol.OK);
 
-            args = reader.readLine().split(" ");
+            String s = reader.readLine();
+            System.out.println(s);
+            args = s.split(" ");
 
             if (args.length == 2 && args[0].equals(Protocol.PASSWORD)) {
                 password = args[1];
@@ -525,7 +523,6 @@ public class ClientThread extends Thread {
     public void disconnect() {
         try {
             connected = false;
-
 
             if (dataReceiveThread != null)
                 dataReceiveThread.setStop();

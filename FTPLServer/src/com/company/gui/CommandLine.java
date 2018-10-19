@@ -4,6 +4,7 @@ import com.company.clients.ClientThread;
 import com.company.db.SQLiteJDBC;
 import com.company.db.User;
 import com.company.server.ServerThread;
+import lib.Base64Coder;
 import lib.Utils;
 
 import java.io.Console;
@@ -91,7 +92,7 @@ public class CommandLine {
                             break;
                         }
 
-                        db.insert(login, pass);
+                        db.insert(login, Base64Coder.encodeString(pass));
                         System.out.println("Zarejestrowano.");
                     } catch (SQLException e) {
                         e.printStackTrace();
