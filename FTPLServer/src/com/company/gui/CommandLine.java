@@ -46,6 +46,8 @@ public class CommandLine {
                 case "q":
                     if (running)
                         startServer();
+                    else
+                        System.exit(0);
                     break;
                 case "conlist":
 

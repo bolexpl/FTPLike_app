@@ -62,7 +62,7 @@ public class Main {
                         break;
                     case "-n":
                     case "--no-gui":
-                        cmd();
+                        new CommandLine();
                         return;
                     case "-h":
                     case "--help":
@@ -82,13 +82,8 @@ public class Main {
             try {
                 new MainWindow();
             } catch (HeadlessException e) {
-//                System.out.println("Code Error");
-                cmd();
+                new CommandLine();
             }
         });
-    }
-
-    private static void cmd(){
-        new CommandLine();
     }
 }
