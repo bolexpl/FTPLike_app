@@ -59,6 +59,7 @@ public class CommandLine {
                     break;
                 case "db":
                     try {
+                        System.out.println("------------------");
                         List<User> l = SQLiteJDBC.getInstance().selectAll();
                         for (User u : l) {
                             System.out.println(u.getLogin());
