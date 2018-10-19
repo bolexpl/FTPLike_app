@@ -70,33 +70,11 @@ public class CommandLine {
                         e.printStackTrace();
                     }
                     break;
+                case "del":
+                    delUser();
+                    break;
                 case "add":
-                    System.out.print("Podaj login: ");
-                    String login = console.readLine();
-
-                    System.out.print("Podaj hasło: ");
-                    String pass = new String(console.readPassword());
-
-                    System.out.print("Potwierdź hasło: ");
-                    String conf = new String(console.readPassword());
-
-                    if (!pass.equals(conf)) {
-                        System.out.println("Hasła się nie zgadzają.");
-                        break;
-                    }
-                    try {
-                        SQLiteJDBC db = SQLiteJDBC.getInstance();
-
-                        if (db.select(login, null).size() != 0) {
-                            System.out.println("Jest już taki login.");
-                            break;
-                        }
-
-                        db.insert(login, Base64Coder.encodeString(pass));
-                        System.out.println("Zarejestrowano.");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    addUser();
                     break;
                 case "help":
                     System.out.println("start         - uruchomienie serwera");
@@ -106,6 +84,52 @@ public class CommandLine {
                     System.out.println("help          - wyświetlenie pomocy");
                     System.out.println("q, quit, exit - wyjście");
             }
+        }
+    }
+
+    private void delUser(){
+        try {
+            SQLiteJDBC db = SQLiteJDBC.getInstance();
+            List<User> l = db.selectAll();
+            for (User u : l) {
+                System.out.println(u.getId() + ". " + u.getLogin());
+            }
+
+            System.out.print("Podaj ID: ");
+            int id;
+            try {
+                id = Integer.parseInt(console.readLine());
+            }catch (NumberFormatException e){
+                System.out.println("Zły numer.");
+                return;
+            }
+
+            db.delete(id);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addUser(){
+        System.out.print("Podaj login: ");
+        String login = console.readLine();
+
+        System.out.print("Podaj hasło: ");
+        String pass = new String(console.readPassword());
+
+        try {
+            SQLiteJDBC db = SQLiteJDBC.getInstance();
+
+            if (db.select(login, null).size() != 0) {
+                System.out.println("Jest już taki login.");
+                return;
+            }
+
+            db.insert(login, Base64Coder.encodeString(pass));
+            System.out.println("Zarejestrowano.");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

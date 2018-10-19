@@ -107,9 +107,7 @@ public class ClientThread extends Thread {
             login = args[1];
             write(Protocol.OK);
 
-            String s = reader.readLine();
-            System.out.println(s);
-            args = s.split(" ");
+            args = reader.readLine().split(" ");
 
             if (args.length == 2 && args[0].equals(Protocol.PASSWORD)) {
                 password = args[1];
