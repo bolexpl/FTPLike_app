@@ -54,7 +54,7 @@ public class ClientThread extends Thread {
         this.model = model;
         this.list = list;
 
-        controlSocket.setSoTimeout(300);
+        controlSocket.setSoTimeout(500);
 
         reader = new BufferedReader(new InputStreamReader(controlSocket.getInputStream()));
         writer = new BufferedWriter(new OutputStreamWriter(controlSocket.getOutputStream()));

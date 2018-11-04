@@ -52,6 +52,7 @@ public class MainWindow extends JFrame {
     private JButton disconnect;
 
     private TransferModel transferModel;
+    private JTable transferTable;
 
     public MainWindow() {
         super("FTP-like Client");
@@ -103,7 +104,44 @@ public class MainWindow extends JFrame {
 
         //<bottom>
         transferModel = new TransferModel();
-        JTable transferTable = new JTable(transferModel);
+        transferTable = new JTable(transferModel);
+        transferTable.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == 3) {
+                    int r = transferTable.rowAtPoint(e.getPoint());
+
+                    if (transferTable.getSelectedRows().length < 2
+                            && r >= 0
+                            && r < transferTable.getRowCount()) {
+                        transferTable.setRowSelectionInterval(r, r);
+                    }
+
+                    TransferPopUp popUp = new TransferPopUp();
+                    popUp.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
 
         transferTable.setPreferredScrollableViewportSize(
                 new Dimension(900, 150));
@@ -239,7 +277,7 @@ public class MainWindow extends JFrame {
                     PopUp popUp = new PopUp(local, instance);
                     popUp.show(e.getComponent(), e.getX(), e.getY());
                     return;
-                } else if (e.getButton() == 1) {
+                } else if (e.getButton() == 1) { //LPM
                     int r = dir.rowAtPoint(e.getPoint());
 
                     if (r == -1) {
@@ -309,10 +347,16 @@ public class MainWindow extends JFrame {
         return panel;
     }
 
+    private void swap() {
+        swap(isLogged);
+    }
+
     /**
      * Podmiana górnego panelu
      */
-    public void swap() {
+    public void swap(boolean isLogged) {
+        if (isLogged != this.isLogged) return;
+
         if (isLogged) {
 
             if (remoteExplorer != null) {
@@ -328,7 +372,7 @@ public class MainWindow extends JFrame {
             remoteModel.updateData(null);
             remoteModel.fireTableDataChanged();
 
-            isLogged = false;
+            this.isLogged = false;
         } else {
 
             if (addressField.getText().length() == 0) {
@@ -366,7 +410,7 @@ public class MainWindow extends JFrame {
                 }
 
                 passwordField.setText("");
-                isLogged = true;
+                this.isLogged = true;
             } else if (con == 1) {
                 new Alert("Błąd połączenia");
             } else if (con == 2) {
@@ -949,6 +993,31 @@ public class MainWindow extends JFrame {
             FilesModel.FileCell cell =
                     (FilesModel.FileCell) dir.getValueAt(dir.getSelectedRow(), 0);
             return explorer.getDir() + "/" + cell.getName();
+        }
+    }
+
+    class TransferPopUp extends JPopupMenu implements ActionListener {
+
+        JMenuItem cancel;
+
+        /**
+         * Constructs a <code>JPopupMenu</code> without an "invoker".
+         */
+        public TransferPopUp() {
+            cancel = new JMenuItem("Anuluj");
+            cancel.addActionListener(this);
+            add(cancel);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String actionCommand = e.getActionCommand();
+
+            if (actionCommand.equals("Anuluj")) {
+                System.out.println("aaaaa");
+            } else {
+                System.out.println("nie");
+            }
         }
     }
 }

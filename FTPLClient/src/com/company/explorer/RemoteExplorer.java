@@ -612,7 +612,7 @@ public class RemoteExplorer implements IExplorer {
                     else x = in.read();
 
                     if (x == -1) {
-                        mainWindow.swap();
+                        mainWindow.swap(true);
                         return;
                     }
                 } catch (IOException ignored) {
@@ -667,15 +667,21 @@ public class RemoteExplorer implements IExplorer {
             long current = 0;
 
             String s;
-            while (!(s = inASCII.readLine()).equals(Protocol.EOF)) {
-                transferModel.setProgress(ti, (int) (((double) current / size) * 100.0));
-                if (s.equals("\\" + Protocol.EOF))
-                    buff.write(s.substring(1));
-                else
-                    buff.write(s);
-                buff.newLine();
-                buff.flush();
-                current += s.length();
+            while (true) {
+                try {
+                    s = inASCII.readLine();
+                    if (s.equals(Protocol.EOF)) break;
+
+                    transferModel.setProgress(ti, (int) (((double) current / size) * 100.0));
+                    if (s.equals("\\" + Protocol.EOF))
+                        buff.write(s.substring(1));
+                    else
+                        buff.write(s);
+                    buff.newLine();
+                    buff.flush();
+                    current += s.length();
+                } catch (SocketTimeoutException ignored) {
+                }
             }
 
             buff.close();
@@ -701,10 +707,13 @@ public class RemoteExplorer implements IExplorer {
             long current = 0;
 
             while (current < max) {
-                transferModel.setProgress(ti, (int) (((double) current / max) * 100.0));
-                k = in.read(data);
-                buff.write(data, 0, k);
-                current += k;
+                try {
+                    transferModel.setProgress(ti, (int) (((double) current / max) * 100.0));
+                    k = in.read(data);
+                    buff.write(data, 0, k);
+                    current += k;
+                } catch (SocketTimeoutException ignored) {
+                }
             }
             buff.flush();
 
