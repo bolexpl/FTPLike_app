@@ -308,9 +308,10 @@ public class MainWindow extends JFrame {
     /**
      * Podmiana górnego panelu
      */
-    private void swap() {
+    public void swap() {
         if (isLogged) {
             remoteExplorer.disconnect();
+            remoteExplorer = null;
             contentPane.remove(logged);
             contentPane.add(top, BorderLayout.NORTH);
 
@@ -379,7 +380,7 @@ public class MainWindow extends JFrame {
         String pass = String.valueOf(passwordField.getPassword());
 
         try {
-            remoteExplorer = new RemoteExplorer(address, Integer.parseInt(port), localModel, remoteModel, transferModel);
+            remoteExplorer = new RemoteExplorer(address, Integer.parseInt(port), localModel, remoteModel, transferModel, this);
 
             if (!remoteExplorer.login(user, pass)) {
                 return 2;

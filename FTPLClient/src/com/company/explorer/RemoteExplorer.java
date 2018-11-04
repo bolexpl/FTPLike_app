@@ -1,5 +1,6 @@
 package com.company.explorer;
 
+import com.company.gui.MainWindow;
 import lib.Utils;
 import lib.Protocol;
 import com.company.files.*;
@@ -9,6 +10,7 @@ import lib.Base64Coder;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,9 +43,11 @@ public class RemoteExplorer implements IExplorer {
 
     private TransferModel transferModel;
 
+    private MainWindow mainWindow;
+
     public RemoteExplorer(String ip, int port,
                           FilesModel localModel, FilesModel remoteModel,
-                          TransferModel transferModel)
+                          TransferModel transferModel, MainWindow mainWindow)
             throws IOException {
         controlSocket = new Socket(ip, port);
 
@@ -53,6 +57,7 @@ public class RemoteExplorer implements IExplorer {
         this.localModel = localModel;
         this.remoteModel = remoteModel;
         this.transferModel = transferModel;
+        this.mainWindow = mainWindow;
     }
 
     /**
@@ -324,6 +329,8 @@ public class RemoteExplorer implements IExplorer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        dataReceiveThread.setStop();
+        dataSendThread.setStop();
     }
 
     /**
@@ -378,6 +385,7 @@ public class RemoteExplorer implements IExplorer {
      * @throws IOException wyjątek
      */
     private void connectStreams() throws IOException {
+        dataSocket.setSoTimeout(500);
         if (ascii) {
             outASCII = new BufferedWriter(new OutputStreamWriter(dataSocket.getOutputStream()));
             inASCII = new BufferedReader(new InputStreamReader(dataSocket.getInputStream()));
@@ -408,7 +416,7 @@ public class RemoteExplorer implements IExplorer {
      * Klasa wątku do wysyłania plików
      */
     class DataSendThread extends Thread {
-        private boolean running = true;
+        private volatile boolean running = true;
         private BufferedWriter outASCII;
         private BufferedOutputStream out;
         private volatile List<NewFile> list;
@@ -438,9 +446,6 @@ public class RemoteExplorer implements IExplorer {
         @Override
         public void run() {
             while (running) {
-                if(dataSocket.isConnected()) {
-                    break;
-                }
                 if (list.size() > 0) {
 
                     NewFile nf = list.remove(0);
@@ -569,7 +574,7 @@ public class RemoteExplorer implements IExplorer {
      * Klasa wątku do odbierania plików
      */
     class DataReceiveThread extends Thread {
-        private boolean running = true;
+        private volatile boolean running = true;
         private BufferedReader inASCII;
         private BufferedInputStream in;
         private volatile List<NewFile> list;
@@ -599,9 +604,22 @@ public class RemoteExplorer implements IExplorer {
         @Override
         public void run() {
             while (running) {
-                if(dataSocket.isConnected()) {
-                    break;
+
+                //sprawdzenie czy połączenie nadal istnieje
+                try {
+                    int x;
+                    if (ascii) x = inASCII.read();
+                    else x = in.read();
+
+                    if (x == -1) {
+                        System.out.println("koniec");
+                        mainWindow.swap();
+                        return;
+                    }
+                } catch (IOException ignored) {
                 }
+
+
                 if (list.size() > 0) {
 
                     NewFile nf = list.remove(0);
