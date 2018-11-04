@@ -612,7 +612,6 @@ public class RemoteExplorer implements IExplorer {
                     else x = in.read();
 
                     if (x == -1) {
-                        System.out.println("koniec");
                         mainWindow.swap();
                         return;
                     }

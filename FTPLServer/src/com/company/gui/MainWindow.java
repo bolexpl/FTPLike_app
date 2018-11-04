@@ -73,6 +73,7 @@ public class MainWindow extends JFrame {
         top.add(new JLabel("Port: "));
         top.add(portField);
         top.add(start);
+        getRootPane().setDefaultButton(start);
         return top;
     }
 

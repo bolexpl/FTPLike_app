@@ -48,6 +48,9 @@ public class MainWindow extends JFrame {
     private String lCut = null;
     private String rCut = null;
 
+    private JButton connect;
+    private JButton disconnect;
+
     private TransferModel transferModel;
 
     public MainWindow() {
@@ -159,7 +162,7 @@ public class MainWindow extends JFrame {
         addressField.setText("localhost");
         portField.setText("3000");
 
-        JButton connect = new JButton("Połącz");
+        connect = new JButton("Połącz");
         connect.addActionListener(e -> swap());
 
         JRadioButton passive = new JRadioButton("pasywny");
@@ -203,9 +206,10 @@ public class MainWindow extends JFrame {
         logged = new JPanel();
         loggedLabel = new JLabel();
         logged.add(loggedLabel);
-        JButton disconnect = new JButton("Odłącz");
+        disconnect = new JButton("Odłącz");
         disconnect.addActionListener(e -> swap());
         logged.add(disconnect);
+        getRootPane().setDefaultButton(connect);
     }
 
     /**
@@ -258,7 +262,7 @@ public class MainWindow extends JFrame {
                     } else {
                         if (local && isLogged) {
                             put();
-                        } else if(isLogged){
+                        } else if (isLogged) {
                             get();
                         }
                     }
@@ -310,10 +314,15 @@ public class MainWindow extends JFrame {
      */
     public void swap() {
         if (isLogged) {
-            remoteExplorer.disconnect();
-            remoteExplorer = null;
+
+            if (remoteExplorer != null) {
+                remoteExplorer.disconnect();
+                remoteExplorer = null;
+            }
             contentPane.remove(logged);
             contentPane.add(top, BorderLayout.NORTH);
+
+            getRootPane().setDefaultButton(connect);
 
             remotePath.setText("");
             remoteModel.updateData(null);
