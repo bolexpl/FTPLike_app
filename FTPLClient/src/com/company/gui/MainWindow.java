@@ -1,10 +1,12 @@
 package com.company.gui;
 
 import com.company.IconTextCellRenderer;
+import com.company.Main;
 import com.company.explorer.IExplorer;
 import com.company.explorer.LocalExplorer;
 import com.company.explorer.RemoteExplorer;
 import com.company.files.FilesModel;
+import com.company.files.TransferInfo;
 import com.company.files.TransferModel;
 import lib.Alert;
 
@@ -49,7 +51,6 @@ public class MainWindow extends JFrame {
     private String rCut = null;
 
     private JButton connect;
-    private JButton disconnect;
 
     private TransferModel transferModel;
     private JTable transferTable;
@@ -63,7 +64,7 @@ public class MainWindow extends JFrame {
 
         ImageIcon folderIcon = new ImageIcon(getClass().getResource("/res/folder16.png"));
         ImageIcon fileIcon = new ImageIcon(getClass().getResource("/res/file16.png"));
-        localExplorer = new LocalExplorer(System.getProperty("user.home"));
+        localExplorer = new LocalExplorer(Main.path);
 
         contentPane = new JPanel();
         prepareTop();
@@ -119,6 +120,12 @@ public class MainWindow extends JFrame {
 
                     TransferPopUp popUp = new TransferPopUp();
                     popUp.show(e.getComponent(), e.getX(), e.getY());
+                }else if (e.getButton() == 1) { //LPM
+                    int r = transferTable.rowAtPoint(e.getPoint());
+
+                    if (r == -1) {
+                        transferTable.clearSelection();
+                    }
                 }
             }
 
@@ -244,7 +251,7 @@ public class MainWindow extends JFrame {
         logged = new JPanel();
         loggedLabel = new JLabel();
         logged.add(loggedLabel);
-        disconnect = new JButton("Odłącz");
+        JButton disconnect = new JButton("Odłącz");
         disconnect.addActionListener(e -> swap());
         logged.add(disconnect);
         getRootPane().setDefaultButton(connect);
@@ -522,7 +529,8 @@ public class MainWindow extends JFrame {
             FilesModel.FileCell cell;
             for (int x : indexes) {
                 cell = (FilesModel.FileCell) dir.getValueAt(x, 0);
-                if (!cell.getName().equals("..") && !explorer.rm(explorer.getDir() + "/" + cell.getName()))
+                if (!cell.getName().equals("..")
+                        && !explorer.rm(explorer.getDir() + "/" + cell.getName()))
                     new Alert("Błąd");
 
             }
@@ -637,23 +645,19 @@ public class MainWindow extends JFrame {
     private void paste(final IExplorer explorer, final String path1,
                        final String path2, final FilesModel model,
                        final boolean copy) {
-        new Thread() {
-
-            @Override
-            public void run() {
-                String tab[] = path1.split("/");
-                try {
-                    if (copy)
-                        explorer.copy(path1, path2 + "/" + tab[tab.length - 1]);
-                    else
-                        explorer.mv(path1, path2 + "/" + tab[tab.length - 1]);
-                    model.updateData();
-                    model.fireTableDataChanged();
-                } catch (IOException e) {
-                    new Alert("Nie można wkleić");
-                }
+        new Thread(() -> {
+            String tab[] = path1.split("/");
+            try {
+                if (copy)
+                    explorer.copy(path1, path2 + "/" + tab[tab.length - 1]);
+                else
+                    explorer.mv(path1, path2 + "/" + tab[tab.length - 1]);
+                model.updateData();
+                model.fireTableDataChanged();
+            } catch (IOException e) {
+                new Alert("Nie można wkleić");
             }
-        }.start();
+        }).start();
     }
 
     /**
@@ -704,6 +708,24 @@ public class MainWindow extends JFrame {
 
         } catch (IOException e) {
             new Alert("Błąd");
+        }
+    }
+
+    /**
+     * Metoda przerywający transfer pliku
+     */
+    private void cancelTransfer() {
+        int[] indexes = transferTable.getSelectedRows();
+
+        TransferInfo cell;
+        for (int x : indexes) {
+
+            System.out.println(x);
+
+            cell = (TransferInfo) transferTable.getValueAt(x, -1);
+            transferModel.remove(cell);
+            remoteExplorer.getDataReceiveThread().removeFile(cell.getNewFile());
+            remoteExplorer.getDataSendThread().removeFile(cell.getNewFile());
         }
     }
 
@@ -996,6 +1018,9 @@ public class MainWindow extends JFrame {
         }
     }
 
+    /**
+     * Klasa menu kontekstowego na liście transferu
+     */
     class TransferPopUp extends JPopupMenu implements ActionListener {
 
         JMenuItem cancel;
@@ -1003,7 +1028,7 @@ public class MainWindow extends JFrame {
         /**
          * Constructs a <code>JPopupMenu</code> without an "invoker".
          */
-        public TransferPopUp() {
+        TransferPopUp() {
             cancel = new JMenuItem("Anuluj");
             cancel.addActionListener(this);
             add(cancel);
@@ -1014,9 +1039,7 @@ public class MainWindow extends JFrame {
             String actionCommand = e.getActionCommand();
 
             if (actionCommand.equals("Anuluj")) {
-                System.out.println("aaaaa");
-            } else {
-                System.out.println("nie");
+                cancelTransfer();
             }
         }
     }

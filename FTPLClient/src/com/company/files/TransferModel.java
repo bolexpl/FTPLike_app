@@ -1,5 +1,7 @@
 package com.company.files;
 
+import sun.rmi.runtime.NewThreadAction;
+
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 import java.util.ArrayList;
@@ -14,6 +16,16 @@ public class TransferModel extends AbstractTableModel {
 
     public TransferModel() {
         this.list = new ArrayList<>();
+
+//        NewFile nf1 = new NewFile("asd", "qwe", "asf");
+//        TransferInfo t1 = new TransferInfo(nf1, true);
+//        NewFile nf2 = new NewFile("dfasfa", "qwfq", "ujm");
+//        TransferInfo t2 = new TransferInfo(nf2, false);
+//        NewFile nf3 = new NewFile("asebgebwd", "afawve", "yhn");
+//        TransferInfo t3 = new TransferInfo(nf3, false);
+//        list.add(t1);
+//        list.add(t2);
+//        list.add(t3);
     }
 
     /**
@@ -34,6 +46,16 @@ public class TransferModel extends AbstractTableModel {
     }
 
     /**
+     * Metoda usuwająca obiekt modelu
+     *
+     * @param object obiekt do usunięcia
+     */
+    public void remove(TransferInfo object) {
+        list.remove(object);
+        fireTableDataChanged();
+    }
+
+    /**
      * Metoda dodająca obiekt do modelu
      *
      * @param ti obiekt reprezentujący transfer
@@ -43,9 +65,15 @@ public class TransferModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public void setProgress(TransferInfo ti, int progress){
+    public void setProgress(TransferInfo ti, int progress) {
+        int i;
+        for (i = 0; i < list.size(); i++) {
+            if (list.get(i) == ti) {
+                break;
+            }
+        }
         ti.setProgress(progress);
-        fireTableDataChanged();
+        fireTableRowsUpdated(i, i);
     }
 
     /**
@@ -108,9 +136,9 @@ public class TransferModel extends AbstractTableModel {
                 return ti.getRemotePath();
             case 2:
                 if (ti.isSend())
-                    return "wysyłanie";
+                    return "wysyłanie  ------>";
                 else
-                    return "pobieranie";
+                    return "odbieranie <------";
             case 3:
                 return ti.getProgress() + "%";
         }

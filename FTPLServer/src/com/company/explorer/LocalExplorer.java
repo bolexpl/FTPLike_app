@@ -16,7 +16,11 @@ public class LocalExplorer {
     private String dir;
 
     public LocalExplorer(String dir) {
-        this.dir = dir;
+        if(Utils.isAccess(dir)){
+            this.dir = dir;
+        }else{
+            this.dir = System.getProperty("user.home");
+        }
     }
 
     /**

@@ -58,13 +58,9 @@ public class ClientThread extends Thread {
 
         reader = new BufferedReader(new InputStreamReader(controlSocket.getInputStream()));
         writer = new BufferedWriter(new OutputStreamWriter(controlSocket.getOutputStream()));
-        if (Main.path != null) {
-            explorer = new LocalExplorer(Main.path);
-        } else if (Main.debug) {
-            explorer = new LocalExplorer("/home/bolek/test");
-        } else {
-            explorer = new LocalExplorer(System.getProperty("user.home"));
-        }
+
+        explorer = new LocalExplorer(Main.path);
+
         start();
     }
 
@@ -806,8 +802,12 @@ public class ClientThread extends Thread {
 
             String s;
             while (!(s = inASCII.readLine()).equals(Protocol.EOF)) {
-                if (s.equals("\\" + Protocol.EOF))
-                    buff.write(s.substring(1, s.length()));
+                if(s.equals(Protocol.CANCEL)){
+                    break;
+                }
+                if (s.equals("\\" + Protocol.EOF)
+                        || s.equals("\\" + Protocol.CANCEL))
+                    buff.write(s.substring(1));
                 else
                     buff.write(s);
                 buff.newLine();

@@ -1,3 +1,8 @@
+TODO przerywanie pobieranie ASCII
+TODO przerywanie pobieranie binarne
+TODO przerywanie wysyłanie ASCII
+TODO przerywanie wysyłanie binarne
+
 kolejność:
 1. logowanie
 2. wybór transferu
@@ -16,6 +21,9 @@ S:OK
 transfer:
 C:TRANSFER (BINARY|ASCII)
 S:OK
+
+przerwanie transferu wychodzącego:
+C:CANCEL
 
 tryb aktywny:
 C:ACTIVE port

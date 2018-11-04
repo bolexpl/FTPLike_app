@@ -17,6 +17,7 @@ public class Protocol {
     public static final String MKDIR = "MK";
     public static final String RM = "RM";
     public static final String EOF = "EOF";
+    public static final String CANCEL = "CANCEL";
     public static final String EXIT = "EXIT";
     public static final String GET = "GET";
     public static final String PUT = "PUT";

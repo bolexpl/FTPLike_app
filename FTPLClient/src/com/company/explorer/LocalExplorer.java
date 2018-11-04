@@ -23,7 +23,11 @@ public class LocalExplorer implements IExplorer {
      * @param dir początkowa ścieżka robocza
      */
     public LocalExplorer(String dir) {
-        this.dir = dir;
+        if(Utils.isAccess(dir)){
+            this.dir = dir;
+        }else{
+            this.dir = System.getProperty("user.home");
+        }
         showHidden = false;
     }
 

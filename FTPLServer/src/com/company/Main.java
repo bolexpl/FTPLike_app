@@ -19,7 +19,7 @@ import java.net.*;
 public class Main {
 
     public static boolean debug = false;
-    public static String path;
+    public static String path = System.getProperty("user.home");
     public static String database = "base.db";
 
     public static void main(String[] args) {
@@ -68,12 +68,12 @@ public class Main {
                     case "--help":
                         System.out.println("Serwer protokołu FTPL");
                         System.out.println("Argumenty opcjonalne:");
-                        System.out.println("-h         --help             wyświetlenie ekranu pomocy");
-                        System.out.println("-d         --debug            tryb debugowania");
-                        System.out.println("-r         --root             ustawienie ścieżki początkowej");
-                        System.out.println("-s         --system           systemowy wygląd okien");
-                        System.out.println("-b <plik>  --database <plik>  plik bazy danych");
-                        System.out.println("-n         --no-gui           plik bazy danych");
+                        System.out.println("-h          --help             wyświetlenie ekranu pomocy");
+                        System.out.println("-d          --debug            tryb debugowania");
+                        System.out.println("-r <folder> --root <folder>    ustawienie ścieżki początkowej");
+                        System.out.println("-s          --system           systemowy wygląd okien");
+                        System.out.println("-b <plik>   --database <plik>  plik bazy danych");
+                        System.out.println("-n          --no-gui           plik bazy danych");
                         System.exit(0);
                 }
             }
