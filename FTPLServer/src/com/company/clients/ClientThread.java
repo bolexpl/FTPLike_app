@@ -13,6 +13,7 @@ import java.awt.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +53,8 @@ public class ClientThread extends Thread {
         this.window = window;
         this.model = model;
         this.list = list;
+
+        controlSocket.setSoTimeout(300);
 
         reader = new BufferedReader(new InputStreamReader(controlSocket.getInputStream()));
         writer = new BufferedWriter(new OutputStreamWriter(controlSocket.getOutputStream()));
@@ -161,7 +164,12 @@ public class ClientThread extends Thread {
 
         while (connected) {
 
-            String s = reader.readLine();
+            String s;
+            try {
+                s = reader.readLine();
+            } catch (SocketTimeoutException e) {
+                continue;
+            }
 
             if (s == null) {
                 disconnect();

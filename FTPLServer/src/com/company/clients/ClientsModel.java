@@ -1,6 +1,9 @@
 package com.company.clients;
 
+import lib.Protocol;
+
 import javax.swing.table.AbstractTableModel;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,26 +17,6 @@ public class ClientsModel extends AbstractTableModel {
 
     public ClientsModel() {
         this.list = new LinkedList<>();
-    }
-
-    /**
-     * Usuwanie odłączonego użytkownika
-     *
-     * @param cl wątek klienta
-     */
-    void remove(ClientThread cl) {
-        list.remove(cl);
-        fireTableDataChanged();
-    }
-
-    /**
-     * Dodawanie podłączonego użytkownika
-     *
-     * @param cl wątek klienta
-     */
-    void add(ClientThread cl) {
-        list.add(cl);
-        fireTableDataChanged();
     }
 
     /**

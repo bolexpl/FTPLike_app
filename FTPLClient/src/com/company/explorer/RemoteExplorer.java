@@ -438,6 +438,9 @@ public class RemoteExplorer implements IExplorer {
         @Override
         public void run() {
             while (running) {
+                if(dataSocket.isConnected()) {
+                    break;
+                }
                 if (list.size() > 0) {
 
                     NewFile nf = list.remove(0);
@@ -596,6 +599,9 @@ public class RemoteExplorer implements IExplorer {
         @Override
         public void run() {
             while (running) {
+                if(dataSocket.isConnected()) {
+                    break;
+                }
                 if (list.size() > 0) {
 
                     NewFile nf = list.remove(0);
