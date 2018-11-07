@@ -75,9 +75,25 @@ public class Utils {
      *
      * @param dir Ścieżka do katalogu
      * @return Czy dostępny katalog
-     */
+     * */
     public static boolean isAccess(String dir) {
         File f = new File(dir);
         return f.exists() && f.isDirectory() && f.canRead() && f.canExecute();
+    }
+
+    /**
+     * Metoda sprawdzająca równość tablic o różnych długościach
+     *
+     * @param bigger większa tablica
+     * @param smaller mniejsza tablica
+     * @return Czy wartości są równe
+     * */
+    public static boolean equalsArrays(byte bigger[], byte smaller[]) {
+
+        for (int i = 0; i < smaller.length; i++)
+            if (bigger[i] != smaller[i])
+                return false;
+
+        return true;
     }
 }

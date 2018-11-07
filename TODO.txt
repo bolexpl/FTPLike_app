@@ -1,5 +1,7 @@
-TODO przerywanie pobieranie binarne
-TODO przerywanie wysyłanie binarne
+przerywanie pobieranie ASCII
+przerywanie wysyłanie ASCII
+przerywanie pobieranie binarne
+przerywanie wysyłanie binarne
 
 kolejność:
 1. logowanie
@@ -9,6 +11,9 @@ kolejność:
 4. zakończenie
 
 ---------------------------------------------------------
+C - klient
+S - serwer
+C2, S2 - drugie połączenie
 
 logowanie:
 C:USER user
@@ -20,8 +25,9 @@ transfer:
 C:TRANSFER (BINARY|ASCII)
 S:OK
 
-przerwanie transferu wychodzącego:
-C:CANCEL
+przerwanie pobierania:
+ASCII in -> C:CANCEL
+ASCII out -> C2:CANCEL
 
 tryb aktywny:
 C:ACTIVE port
