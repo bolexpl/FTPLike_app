@@ -9,6 +9,7 @@ import com.company.files.FilesModel;
 import com.company.files.TransferInfo;
 import com.company.files.TransferModel;
 import lib.Alert;
+import lib.Utils;
 
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
@@ -120,7 +121,7 @@ public class MainWindow extends JFrame {
 
                     TransferPopUp popUp = new TransferPopUp();
                     popUp.show(e.getComponent(), e.getX(), e.getY());
-                }else if (e.getButton() == 1) { //LPM
+                } else if (e.getButton() == 1) { //LPM
                     int r = transferTable.rowAtPoint(e.getPoint());
 
                     if (r == -1) {
@@ -354,6 +355,9 @@ public class MainWindow extends JFrame {
         return panel;
     }
 
+    /**
+     * Podmiana górnego panelu
+     */
     private void swap() {
         swap(isLogged);
     }
@@ -361,7 +365,7 @@ public class MainWindow extends JFrame {
     /**
      * Podmiana górnego panelu
      */
-    public void swap(boolean isLogged) {
+    private void swap(boolean isLogged) {
         if (isLogged != this.isLogged) return;
 
         if (isLogged) {
@@ -714,18 +718,28 @@ public class MainWindow extends JFrame {
     /**
      * Metoda przerywający transfer pliku
      */
-    private void cancelTransfer() {
+    public void cancelTransfer() {
+        transferTable.selectAll();
+
         int[] indexes = transferTable.getSelectedRows();
 
         TransferInfo cell;
         for (int x : indexes) {
 
-            System.out.println(x);
+            if (Utils.debug)
+                System.out.println("cancel " + x);
 
             cell = (TransferInfo) transferTable.getValueAt(x, -1);
             transferModel.remove(cell);
-            remoteExplorer.getDataReceiveThread().removeFile(cell.getNewFile());
-            remoteExplorer.getDataSendThread().removeFile(cell.getNewFile());
+            try {
+                if (cell.isSend())
+                    remoteExplorer.cancelSendTransfer(cell.getNewFile());
+                else
+                    remoteExplorer.cancelReceiveTransfer(cell.getNewFile());
+            } catch (IOException e) {
+                new Alert("Błąd wysyłania");
+                e.printStackTrace();
+            }
         }
     }
 

@@ -1,6 +1,4 @@
-TODO przerywanie pobieranie ASCII
 TODO przerywanie pobieranie binarne
-TODO przerywanie wysyłanie ASCII
 TODO przerywanie wysyłanie binarne
 
 kolejność:

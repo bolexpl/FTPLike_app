@@ -1,7 +1,5 @@
 package com.company.files;
 
-import sun.rmi.runtime.NewThreadAction;
-
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 import java.util.ArrayList;

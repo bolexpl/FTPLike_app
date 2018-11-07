@@ -54,7 +54,8 @@ public class ClientThread extends Thread {
         this.model = model;
         this.list = list;
 
-        controlSocket.setSoTimeout(500);
+        if (!Utils.debug)
+            controlSocket.setSoTimeout(500);
 
         reader = new BufferedReader(new InputStreamReader(controlSocket.getInputStream()));
         writer = new BufferedWriter(new OutputStreamWriter(controlSocket.getOutputStream()));
@@ -179,6 +180,10 @@ public class ClientThread extends Thread {
             switch (args[0]) {
                 case Protocol.EXIT:
                     disconnect();
+                    break;
+
+                case Protocol.CANCEL:
+                    dataSendThread.removeFile();
                     break;
 
                 case Protocol.PASSIV:
@@ -589,6 +594,10 @@ public class ClientThread extends Thread {
             this.out = out;
         }
 
+        void removeFile() {
+            list.remove(0);
+        }
+
         /**
          * Metoda zatrzymująca wątek
          */
@@ -610,7 +619,7 @@ public class ClientThread extends Thread {
             while (running) {
                 if (list.size() > 0) {
 
-                    File f = list.remove(0);
+                    File f = list.get(0);
 
                     try {
                         if (ascii) {
@@ -621,6 +630,8 @@ public class ClientThread extends Thread {
                     } catch (IOException e) {
                         disconnect();
                     }
+
+                    list.remove(f);
                 }
             }
         }
@@ -639,6 +650,12 @@ public class ClientThread extends Thread {
             send(Long.toString(f.length()));
 
             while ((s = buff.readLine()) != null) {
+
+                if (!list.contains(f)) {
+                    buff.close();
+                    send(Protocol.CANCEL);
+                    return;
+                }
 
                 if (s.equals(Protocol.EOF)) {
                     send("\\" + s);
@@ -695,6 +712,7 @@ public class ClientThread extends Thread {
          * @throws IOException wyjątek
          */
         void send(String data) throws IOException {
+            System.out.println(data);
             outASCII.write(data);
             outASCII.newLine();
             outASCII.flush();
@@ -801,8 +819,13 @@ public class ClientThread extends Thread {
             long size = Long.parseLong(inASCII.readLine());
 
             String s;
-            while (!(s = inASCII.readLine()).equals(Protocol.EOF)) {
-                if(s.equals(Protocol.CANCEL)){
+            while ((s = inASCII.readLine()) != null) {
+                if (s.equals(Protocol.EOF)) {
+                    break;
+                }
+                if (s.equals(Protocol.CANCEL)) {
+                    f.delete();
+                    buff.close();
                     break;
                 }
                 if (s.equals("\\" + Protocol.EOF)

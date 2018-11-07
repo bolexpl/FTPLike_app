@@ -11,13 +11,6 @@ public class TransferInfo {
     private boolean send;
     private int progress;
 
-//    public TransferInfo(String localPath, String remotePath, boolean send) {
-//        this.localPath = localPath;
-//        this.remotePath = remotePath;
-//        this.send = send;
-//        this.progress = 0;
-//    }
-
     public TransferInfo(NewFile nf, boolean send) {
         this.localPath = nf.getLocalPath() + "/" + nf.getName();
         this.remotePath = nf.getRemotePath() + "/" + nf.getName();
@@ -38,15 +31,15 @@ public class TransferInfo {
         return remotePath;
     }
 
-    boolean isSend() {
+    public boolean isSend() {
         return send;
     }
 
-    public int getProgress() {
+    int getProgress() {
         return progress;
     }
 
-    public void setProgress(int progress) {
+    void setProgress(int progress) {
         this.progress = progress;
     }
 }

@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 public class Utils {
 
     private static ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+    public static boolean debug = true;
 
     /**
      * Metoda zamienia long na tablicę bajtów

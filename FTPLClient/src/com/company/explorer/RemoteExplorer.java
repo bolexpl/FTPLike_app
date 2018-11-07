@@ -398,7 +398,8 @@ public class RemoteExplorer implements IExplorer {
      * @throws IOException wyjątek
      */
     private void connectStreams() throws IOException {
-        dataSocket.setSoTimeout(500);
+        if (!Utils.debug)
+            dataSocket.setSoTimeout(500);
         if (ascii) {
             outASCII = new BufferedWriter(new OutputStreamWriter(dataSocket.getOutputStream()));
             inASCII = new BufferedReader(new InputStreamReader(dataSocket.getInputStream()));
@@ -411,6 +412,15 @@ public class RemoteExplorer implements IExplorer {
         dataReceiveThread.start();
         dataSendThread = new DataSendThread(outASCII, out);
         dataSendThread.start();
+    }
+
+    public void cancelReceiveTransfer(NewFile nf) throws IOException {
+        write(Protocol.CANCEL);
+        dataReceiveThread.list.remove(nf);
+    }
+
+    public void cancelSendTransfer(NewFile nf) {
+        dataSendThread.list.remove(nf);
     }
 
     /**
@@ -438,10 +448,6 @@ public class RemoteExplorer implements IExplorer {
             this.list = new LinkedList<>();
             this.outASCII = outASCII;
             this.out = out;
-        }
-
-        public void removeFile(NewFile nf) {
-            list.remove(nf);
         }
 
         /**
@@ -490,6 +496,11 @@ public class RemoteExplorer implements IExplorer {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     remoteModel.updateData();
                     remoteModel.fireTableDataChanged();
                 }
@@ -515,7 +526,14 @@ public class RemoteExplorer implements IExplorer {
             send(Long.toString(size));
 
             String s;
+//            int d = 0;
             while ((s = buff.readLine()) != null) {
+
+//                if (d == 2) {
+//                    mainWindow.cancelTransfer();
+//                }
+//                d++;
+
                 if (!list.contains(nf)) {
                     send(Protocol.CANCEL);
                     buff.close();
@@ -618,10 +636,6 @@ public class RemoteExplorer implements IExplorer {
             list = new LinkedList<>();
         }
 
-        public void removeFile(NewFile nf) {
-            list.remove(nf);
-        }
-
         /**
          * Metoda zatrzymująca wątek
          */
@@ -643,22 +657,22 @@ public class RemoteExplorer implements IExplorer {
             while (running) {
 
                 //sprawdzenie czy połączenie nadal istnieje
-                try {
-                    int x;
-                    if (ascii) x = inASCII.read();
-                    else x = in.read();
-
-                    if (x == -1) {
-                        mainWindow.swap(true);
-                        return;
-                    }
-                } catch (IOException ignored) {
-                }
+//                try {
+//                    int x;
+//                    if (ascii) x = inASCII.read();
+//                    else x = in.read();
+//
+//                    if (x == -1) {
+//                        mainWindow.swap(true);
+//                        return;
+//                    }
+//                } catch (IOException ignored) {
+//                }
 
 
                 if (list.size() > 0) {
 
-                    NewFile nf = list.remove(0);
+                    NewFile nf = list.get(0);
                     File f = new File(nf.getLocalPath() + "/" + nf.getName());
 
                     try {
@@ -673,7 +687,8 @@ public class RemoteExplorer implements IExplorer {
                                 receiveBinary(f, nf.getTi());
                             }
 
-                            transferModel.remove(nf.getLocalPath() + "/" + nf.getName()
+                            transferModel.remove(
+                                    nf.getLocalPath() + "/" + nf.getName()
                                     , nf.getRemotePath() + "/" + nf.getName());
 
                         } else {
@@ -683,6 +698,9 @@ public class RemoteExplorer implements IExplorer {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
+                    list.remove(nf);
+
                     localModel.updateData();
                     localModel.fireTableDataChanged();
                 }
@@ -705,11 +723,22 @@ public class RemoteExplorer implements IExplorer {
 
             String s;
             while (true) {
+
                 try {
                     s = inASCII.readLine();
+
+                    if (s.equals(Protocol.CANCEL)) {
+                        buff.close();
+                        f.delete();
+                        return;
+                    }
+
                     if (s.equals(Protocol.EOF)) break;
 
-                    transferModel.setProgress(ti, (int) (((double) current / size) * 100.0));
+                    transferModel.setProgress(
+                            ti,
+                            (int) (((double) current / size) * 100.0));
+
                     if (s.equals("\\" + Protocol.EOF))
                         buff.write(s.substring(1));
                     else
