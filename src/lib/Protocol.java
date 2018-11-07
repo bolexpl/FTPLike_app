@@ -17,7 +17,7 @@ public class Protocol {
     public static final String MKDIR = "MK";
     public static final String RM = "RM";
     public static final String EOF = "EOF";
-    public static final String CANCEL = "C";
+    public static final String CANCEL = "CANCEL";
     public static final String EXIT = "EXIT";
     public static final String GET = "GET";
     public static final String PUT = "PUT";
@@ -41,7 +41,7 @@ public class Protocol {
     /**
      * Rozmiar pakietu w transferze binarnym
      */
-    public static final int PACKET_LENGTH = 3;
+    public static final int PACKET_LENGTH = 512;
 
     private Protocol() {
     }
