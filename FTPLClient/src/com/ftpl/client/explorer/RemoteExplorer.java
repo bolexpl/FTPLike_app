@@ -417,6 +417,8 @@ public class RemoteExplorer implements IExplorer {
      * @throws IOException wyjątek
      */
     private void write(String s) throws IOException {
+        if(Utils.debug)
+            System.out.println("DEBUG: "+s);
         writer.write(s);
         writer.newLine();
         writer.flush();
@@ -649,19 +651,20 @@ public class RemoteExplorer implements IExplorer {
         public void run() {
             while (running) {
 
-                //sprawdzenie czy połączenie nadal istnieje
-                try {
-                    int x;
-                    if (ascii) x = inASCII.read();
-                    else x = in.read();
+                if(Utils.debug){
+                    //sprawdzenie czy połączenie nadal istnieje
+                    try {
+                        int x;
+                        if (ascii) x = inASCII.read();
+                        else x = in.read();
 
-                    if (x == -1) {
-                        mainWindow.swap(true);
-                        return;
+                        if (x == -1) {
+                            mainWindow.swap(true);
+                            return;
+                        }
+                    } catch (IOException ignored) {
                     }
-                } catch (IOException ignored) {
                 }
-
 
                 if (list.size() > 0) {
 

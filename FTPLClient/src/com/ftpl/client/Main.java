@@ -1,6 +1,7 @@
 package com.ftpl.client;
 
 import com.ftpl.client.gui.MainWindow;
+import com.ftpl.lib.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ import java.awt.*;
  */
 public class Main {
 
-    public static String path = System.getProperty("user.home");
+
 
     public static void main(String[] args) {
 
@@ -35,7 +36,7 @@ public class Main {
                             System.out.println("Złe argumenty");
                             System.exit(0);
                         }
-                        path = args[i];
+                        Utils.path = args[i];
                         break;
                     case "-h":
                     case "--help":

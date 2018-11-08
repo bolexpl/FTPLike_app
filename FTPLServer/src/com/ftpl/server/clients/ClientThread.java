@@ -1,6 +1,5 @@
 package com.ftpl.server.clients;
 
-import com.ftpl.server.Main;
 import com.ftpl.server.NewFile;
 import com.ftpl.server.db.User;
 import com.ftpl.server.gui.MainWindow;
@@ -60,7 +59,7 @@ public class ClientThread extends Thread {
         reader = new BufferedReader(new InputStreamReader(controlSocket.getInputStream()));
         writer = new BufferedWriter(new OutputStreamWriter(controlSocket.getOutputStream()));
 
-        explorer = new LocalExplorer(Main.path);
+        explorer = new LocalExplorer(Utils.path);
 
         start();
     }
@@ -487,8 +486,9 @@ public class ClientThread extends Thread {
      * @throws IOException wyjątek
      */
     private void write(String s) throws IOException {
-        if(Main.debug)
-            System.out.println("DEBUG: "+s);
+        if(Utils.debug) {
+            System.out.println("DEBUG: " + s);
+        }
         writer.write(s);
         writer.newLine();
         writer.flush();

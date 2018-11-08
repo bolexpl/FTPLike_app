@@ -1,8 +1,3 @@
-przerywanie pobieranie ASCII
-przerywanie wysyłanie ASCII
-przerywanie pobieranie binarne
-przerywanie wysyłanie binarne
-
 kolejność:
 1. logowanie
 2. wybór transferu

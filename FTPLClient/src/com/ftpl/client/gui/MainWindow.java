@@ -9,6 +9,7 @@ import com.ftpl.client.files.FilesModel;
 import com.ftpl.client.files.TransferInfo;
 import com.ftpl.client.files.TransferModel;
 import com.ftpl.lib.Alert;
+import com.ftpl.lib.Utils;
 
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
@@ -64,7 +65,7 @@ public class MainWindow extends JFrame {
 
         ImageIcon folderIcon = new ImageIcon(getClass().getResource("/res/folder16.png"));
         ImageIcon fileIcon = new ImageIcon(getClass().getResource("/res/file16.png"));
-        localExplorer = new LocalExplorer(Main.path);
+        localExplorer = new LocalExplorer(Utils.path);
 
         contentPane = new JPanel();
         prepareTop();
@@ -78,7 +79,7 @@ public class MainWindow extends JFrame {
         localDir.setShowGrid(false);
         localDir.setFillsViewportHeight(true);
 
-        JPanel left = preparePanel(localDir, localPath, true);
+        JPanel left = preparePanel(localDir, localPath, true, localModel, localExplorer);
 
         TableColumnModel tableColumnModel = localDir.getColumnModel();
         tableColumnModel.getColumn(0).setCellRenderer(new IconTextCellRenderer(folderIcon, fileIcon));
@@ -93,7 +94,7 @@ public class MainWindow extends JFrame {
         remoteDir = new JTable(remoteModel);
         remoteDir.setShowGrid(false);
         remoteDir.setFillsViewportHeight(true);
-        JPanel right = preparePanel(remoteDir, remotePath, false);
+        JPanel right = preparePanel(remoteDir, remotePath, false, remoteModel, remoteExplorer);
         right.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 
         tableColumnModel = remoteDir.getColumnModel();
@@ -262,7 +263,9 @@ public class MainWindow extends JFrame {
      */
     private JPanel preparePanel(final JTable dir,
                                 final JTextField path,
-                                final boolean local) {
+                                final boolean local,
+                                final FilesModel model,
+                                final IExplorer explorer) {
         final JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
@@ -346,11 +349,34 @@ public class MainWindow extends JFrame {
             }
         });
 
+        dir.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+                .put(KeyStroke
+                        .getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+        dir.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+                .put(KeyStroke
+                        .getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "BackSpace");
+
+        dir.getActionMap().put("Enter", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[] indexes = dir.getSelectedRows();
+
+                if (indexes.length == 1) {
+                    open(explorer, dir, path, model);
+                }
+            }
+        });
+        dir.getActionMap().put("BackSpace", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                open(explorer, dir, path, model, 0);
+            }
+        });
+
         JScrollPane jScrollPane = new JScrollPane(dir);
         panel.setLayout(new BorderLayout());
         panel.add(path, BorderLayout.NORTH);
         panel.add(jScrollPane);
-
         return panel;
     }
 
@@ -472,8 +498,12 @@ public class MainWindow extends JFrame {
      * Otwarcie katalogu
      */
     private void open(IExplorer explorer, JTable dir, JTextField path, FilesModel model) {
+        open(explorer, dir, path, model, dir.getSelectedRow());
+    }
+
+    private void open(IExplorer explorer, JTable dir, JTextField path, FilesModel model, int index) {
         FilesModel.FileCell cell =
-                (FilesModel.FileCell) dir.getValueAt(dir.getSelectedRow(), 0);
+                (FilesModel.FileCell) dir.getValueAt(index, 0);
 
         if (cell.isDirectory()) {
             explorer.cd(cell.getName());

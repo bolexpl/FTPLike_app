@@ -1,5 +1,6 @@
 package com.ftpl.server;
 
+import com.ftpl.lib.Utils;
 import com.ftpl.server.gui.CommandLine;
 import com.ftpl.server.gui.MainWindow;
 
@@ -15,19 +16,16 @@ import java.awt.*;
  */
 public class Main {
 
-    public static boolean debug = false;
-    public static String path = System.getProperty("user.home");
     public static String database = "base.db";
 
     public static void main(String[] args) {
-
 
         if (args.length > 0) {
             for (int i = 0; i < args.length; i++) {
                 switch (args[i]) {
                     case "-d":
                     case "--debug":
-                        debug = true;
+                        Utils.debug = true;
                         break;
                     case "-r":
                     case "--root":
@@ -35,7 +33,7 @@ public class Main {
                             System.out.println("Złe argumenty");
                             System.exit(0);
                         }
-                        path = args[i];
+                        Utils.path = args[i];
                         break;
                     case "-s":
                     case "--system":
@@ -58,7 +56,9 @@ public class Main {
                             database = args[i] + ".db";
                         break;
                     case "-n":
+                    case "-c":
                     case "--no-gui":
+                    case "--command-line":
                         new CommandLine();
                         return;
                     case "-h":
@@ -70,7 +70,8 @@ public class Main {
                         System.out.println("-r <folder> --root <folder>    ustawienie ścieżki początkowej");
                         System.out.println("-s          --system           systemowy wygląd okien");
                         System.out.println("-b <plik>   --database <plik>  plik bazy danych");
-                        System.out.println("-n          --no-gui           plik bazy danych");
+                        System.out.println("-n          --no-gui           tryb wiersza poleceń");
+                        System.out.println("-c          --command-line     tryb wiersza poleceń");
                         System.exit(0);
                 }
             }
