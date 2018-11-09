@@ -8,10 +8,11 @@
 hs_err_pid*
 
 .idea/
-FTPLike.iml
 base.db
 out/
 /FTPClient/FTPClient.iml
 /FTPServer/FTPServer.iml
 FTPServer/src/lib/
 FTPClient/src/com/com.company/server/
+FTPLike_app.iml
+/FTPLike_app.iml
