@@ -10,5 +10,6 @@
     <orderEntry type="module" module-name="FTPLike" />
     <orderEntry type="library" name="sqlite-jdbc-3.21.0" level="project" />
     <orderEntry type="module" module-name="FTPLike_app" />
+    <orderEntry type="module" module-name="FTPLike_app" />
   </component>
 </module>

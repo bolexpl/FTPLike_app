@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="FTPLike" />
     <orderEntry type="module" module-name="FTPLike_app" />
+    <orderEntry type="module" module-name="FTPLike_app" />
   </component>
 </module>
