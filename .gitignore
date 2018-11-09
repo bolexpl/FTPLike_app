@@ -8,9 +8,6 @@ hs_err_pid*
 base.db
 *.iml
 
-# Compiled class file
-*.class
-
 # Log file
 *.log
 
@@ -29,3 +26,4 @@ base.db
 *.tar.gz
 *.rar
 out/
+META-INF/
