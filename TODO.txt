@@ -1,6 +1,7 @@
 obsługa klawiaturą:
 TODO przechodzenie między panelami za pomocą strzałek
 TODO PopUpMenu na ALT+ENTER
+TODO błąd usuwania przy anulowaniu
 
 kolejność:
 1. logowanie
