@@ -27,3 +27,6 @@ base.db
 *.rar
 out/
 META-INF/
+src/main/resources/
+src/test/
+target/
