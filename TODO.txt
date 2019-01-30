@@ -1,5 +1,4 @@
-TODO przechodzenie między panelami za pomocą klawiatury
-TODO PopUpMenu na ALT+ENTER
+TODO PopUpMenu na SHIFT + F10
 TODO błąd usuwania przy anulowaniu
 
 kolejność:

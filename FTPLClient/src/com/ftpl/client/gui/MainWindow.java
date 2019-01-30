@@ -21,7 +21,7 @@ import java.net.URL;
 /**
  * Klasa głównego okna
  */
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements KeyListener {
 
     private FilesModel localModel;
     private final JTable localDir;
@@ -42,7 +42,6 @@ public class MainWindow extends JFrame {
     private ButtonGroup transfer;
     private JLabel loggedLabel;
     private String tmpName;
-    private MainWindow instance = this;
 
     private boolean isLogged = false;
 
@@ -165,14 +164,14 @@ public class MainWindow extends JFrame {
         this.tmpName = tmpName;
     }
 
-    private JTable prepareTable(FilesModel model){
+    private JTable prepareTable(FilesModel model) {
         JTable table = new JTable(model);
         table.setShowGrid(false);
         table.setFillsViewportHeight(true);
         return table;
     }
 
-    private void setupContentPane(JPanel left, JPanel right, JScrollPane scrollPane){
+    private void setupContentPane(JPanel left, JPanel right, JScrollPane scrollPane) {
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, right);
         split.setDividerLocation(0.5);
         contentPane.addComponentListener(new ComponentAdapter() {
@@ -292,8 +291,7 @@ public class MainWindow extends JFrame {
                         dir.setRowSelectionInterval(r, r);
                     }
 
-                    PopUp popUp = new PopUp(local, instance);
-                    popUp.show(e.getComponent(), e.getX(), e.getY());
+                    showPopUpMenu(local, e);
                     return;
                 } else if (e.getButton() == 1) { //LPM
                     int r = dir.rowAtPoint(e.getPoint());
@@ -342,6 +340,30 @@ public class MainWindow extends JFrame {
             }
         });
 
+        dir.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                int i = e.getKeyCode();
+                if (i == KeyEvent.VK_RIGHT) {
+                    remoteDir.requestFocus();
+                } else if (i == KeyEvent.VK_LEFT) {
+                    localDir.requestFocus();
+                } else if (i == KeyEvent.VK_F10
+                        && ((e.getModifiers() & KeyEvent.SHIFT_MASK) != 0)) {
+                    //TODO
+                    showPopUpMenu(local, null);
+                }
+            }
+        });
+
         path.addActionListener(e -> {
             String p = ((JTextField) e.getSource()).getText().trim();
 
@@ -386,6 +408,15 @@ public class MainWindow extends JFrame {
         panel.add(path, BorderLayout.NORTH);
         panel.add(jScrollPane);
         return panel;
+    }
+
+    private void showPopUpMenu(boolean local, MouseEvent e) {
+        //TODO
+        PopUp popUp = new PopUp(local, this);
+        if (e == null)
+            popUp.show(null, 50, 50);
+        else
+            popUp.show(e.getComponent(), e.getX(), e.getY());
     }
 
     /**
@@ -774,6 +805,36 @@ public class MainWindow extends JFrame {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void keyReleased(KeyEvent e) {
+//        int i = e.getKeyCode();
+//        if (i == KeyEvent.VK_RIGHT) {
+//            remoteDir.requestFocus();
+//        } else if (i == KeyEvent.VK_LEFT) {
+//            localDir.requestFocus();
+//        } else if (i == KeyEvent.VK_F10 && ((e.getModifiers() & KeyEvent.SHIFT_MASK) != 0)) {
+//            System.out.println(getFocusOwner());
+//        }
     }
 
     /**
