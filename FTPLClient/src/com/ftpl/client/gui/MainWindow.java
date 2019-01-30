@@ -1,7 +1,6 @@
 package com.ftpl.client.gui;
 
 import com.ftpl.client.IconTextCellRenderer;
-import com.ftpl.client.Main;
 import com.ftpl.client.explorer.IExplorer;
 import com.ftpl.client.explorer.LocalExplorer;
 import com.ftpl.client.explorer.RemoteExplorer;
@@ -10,6 +9,7 @@ import com.ftpl.client.files.TransferInfo;
 import com.ftpl.client.files.TransferModel;
 import com.ftpl.lib.Alert;
 import com.ftpl.lib.Utils;
+import com.sun.istack.internal.NotNull;
 
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
@@ -75,33 +75,22 @@ public class MainWindow extends JFrame {
         localPath = new JTextField(15);
         localPath.setText(localExplorer.getDir());
         localModel = new FilesModel(localExplorer);
-        localDir = new JTable(localModel);
-        localDir.setShowGrid(false);
-        localDir.setFillsViewportHeight(true);
+        localDir = prepareTable(localModel);
 
         JPanel left = preparePanel(localDir, localPath, true, localModel, localExplorer);
 
-        TableColumnModel tableColumnModel = localDir.getColumnModel();
-        tableColumnModel.getColumn(0).setCellRenderer(new IconTextCellRenderer(folderIcon, fileIcon));
-        tableColumnModel.getColumn(1).setPreferredWidth(80);
-        tableColumnModel.getColumn(1).setMaxWidth(120);
-        tableColumnModel.getColumn(2).setMaxWidth(80);
+        setColumns(localDir, folderIcon, fileIcon);
         //</left>
 
         //<right>
         remotePath = new JTextField(15);
         remoteModel = new FilesModel();
-        remoteDir = new JTable(remoteModel);
-        remoteDir.setShowGrid(false);
-        remoteDir.setFillsViewportHeight(true);
+        remoteDir = prepareTable(remoteModel);
+
         JPanel right = preparePanel(remoteDir, remotePath, false, remoteModel, remoteExplorer);
         right.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 
-        tableColumnModel = remoteDir.getColumnModel();
-        tableColumnModel.getColumn(0).setCellRenderer(new IconTextCellRenderer(folderIcon, fileIcon));
-        tableColumnModel.getColumn(1).setPreferredWidth(80);
-        tableColumnModel.getColumn(1).setMaxWidth(120);
-        tableColumnModel.getColumn(2).setMaxWidth(80);
+        setColumns(remoteDir, folderIcon, fileIcon);
         //</right>
 
         //<bottom>
@@ -164,6 +153,26 @@ public class MainWindow extends JFrame {
         bottom.add(scrollPane);
         //</bottom>
 
+        setupContentPane(left, right, scrollPane);
+        setContentPane(contentPane);
+
+        pack();
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    void setTmpName(String tmpName) {
+        this.tmpName = tmpName;
+    }
+
+    private JTable prepareTable(FilesModel model){
+        JTable table = new JTable(model);
+        table.setShowGrid(false);
+        table.setFillsViewportHeight(true);
+        return table;
+    }
+
+    private void setupContentPane(JPanel left, JPanel right, JScrollPane scrollPane){
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, right);
         split.setDividerLocation(0.5);
         contentPane.addComponentListener(new ComponentAdapter() {
@@ -182,15 +191,14 @@ public class MainWindow extends JFrame {
         contentPane.add(top, BorderLayout.NORTH);
         contentPane.add(split);
         contentPane.add(scrollPane, BorderLayout.SOUTH);
-        setContentPane(contentPane);
-
-        pack();
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
     }
 
-    void setTmpName(String tmpName) {
-        this.tmpName = tmpName;
+    private void setColumns(@NotNull JTable table, ImageIcon folderIcon, ImageIcon fileIcon) {
+        TableColumnModel tableColumnModel = table.getColumnModel();
+        tableColumnModel.getColumn(0).setCellRenderer(new IconTextCellRenderer(folderIcon, fileIcon));
+        tableColumnModel.getColumn(1).setPreferredWidth(80);
+        tableColumnModel.getColumn(1).setMaxWidth(120);
+        tableColumnModel.getColumn(2).setMaxWidth(80);
     }
 
     /**
@@ -582,7 +590,7 @@ public class MainWindow extends JFrame {
                 (FilesModel.FileCell) dir.getValueAt(dir.getSelectedRow(), 0);
 
         tmpName = null;
-        new Prompt(this);
+        new Prompt(this, cell.getName());
         if (tmpName == null || tmpName.equals("")) {
             return;
         }

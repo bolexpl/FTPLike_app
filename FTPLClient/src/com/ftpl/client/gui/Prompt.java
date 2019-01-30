@@ -18,8 +18,19 @@ class Prompt extends JDialog {
      * @param mainWindow Referencja do głównego okna
      * */
     Prompt(MainWindow mainWindow) {
+        this(mainWindow, null);
+    }
+
+    /**
+     * @param mainWindow Referencja do głównego okna
+     * @param value wartość w polu edycyjnym
+     * */
+    Prompt(MainWindow mainWindow, String value) {
         this.mainWindow = mainWindow;
         nameField = new JTextField();
+        if(value != null){
+            nameField.setText(value);
+        }
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
         GridLayout grid = new GridLayout(2, 1);
@@ -80,7 +91,6 @@ class Prompt extends JDialog {
         setLocation((int) screen.getWidth() / 2 - getWidth() / 2,
                 (int) screen.getHeight() / 2 - getHeight() / 2);
         setVisible(true);
-
     }
 
     /**
