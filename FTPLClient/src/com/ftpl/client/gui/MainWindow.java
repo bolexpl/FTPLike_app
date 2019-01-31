@@ -65,6 +65,8 @@ public class MainWindow extends JFrame {
         Image img = Toolkit.getDefaultToolkit().createImage(url);
         setIconImage(img);
 
+        createMenuBar();
+
         ImageIcon folderIcon = new ImageIcon(getClass().getResource("/res/folder16.png"));
         ImageIcon fileIcon = new ImageIcon(getClass().getResource("/res/file16.png"));
         localExplorer = new LocalExplorer(Utils.path);
@@ -79,7 +81,7 @@ public class MainWindow extends JFrame {
         localModel = new FilesModel(localExplorer);
         localDir = prepareTable(localModel);
 
-        JPanel left = preparePanel(localDir, localPath, true, localModel, localExplorer);
+        JPanel left = preparePanel(localDir, localPath, true);
 
         setColumns(localDir, folderIcon, fileIcon);
         //</left>
@@ -89,7 +91,7 @@ public class MainWindow extends JFrame {
         remoteModel = new FilesModel();
         remoteDir = prepareTable(remoteModel);
 
-        JPanel right = preparePanel(remoteDir, remotePath, false, remoteModel, remoteExplorer);
+        JPanel right = preparePanel(remoteDir, remotePath, false);
         right.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 
         setColumns(remoteDir, folderIcon, fileIcon);
@@ -167,6 +169,12 @@ public class MainWindow extends JFrame {
         this.tmpName = tmpName;
     }
 
+    /**
+     * Przygotowanie tabeli
+     *
+     * @param model model danych
+     * @return obiekt JTable
+     */
     private JTable prepareTable(FilesModel model) {
         JTable table = new JTable(model);
         table.setShowGrid(false);
@@ -174,6 +182,13 @@ public class MainWindow extends JFrame {
         return table;
     }
 
+    /**
+     * Wypełnienie głównego panelu
+     *
+     * @param left       lewy panel
+     * @param right      prawy panel
+     * @param scrollPane dolny panel
+     */
     private void setupContentPane(JPanel left, JPanel right, JScrollPane scrollPane) {
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, right);
         split.setDividerLocation(0.5);
@@ -195,12 +210,45 @@ public class MainWindow extends JFrame {
         contentPane.add(scrollPane, BorderLayout.SOUTH);
     }
 
+    /**
+     * Ustawienie właściwości kolumn w tabeli
+     *
+     * @param table      tabela
+     * @param folderIcon ikona folderu
+     * @param fileIcon   ikona pliku
+     */
     private void setColumns(@NotNull JTable table, ImageIcon folderIcon, ImageIcon fileIcon) {
         TableColumnModel tableColumnModel = table.getColumnModel();
         tableColumnModel.getColumn(0).setCellRenderer(new IconTextCellRenderer(folderIcon, fileIcon));
         tableColumnModel.getColumn(1).setPreferredWidth(80);
         tableColumnModel.getColumn(1).setMaxWidth(120);
         tableColumnModel.getColumn(2).setMaxWidth(80);
+    }
+
+    /**
+     * Tworzenie paska menu
+     */
+    private void createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+
+        JMenu menu = new JMenu("Program");
+        menu.setMnemonic(KeyEvent.VK_P);
+        JMenuItem item;
+        item = new JMenuItem("Pomoc");
+        item.setMnemonic(KeyEvent.VK_P);
+        item.setToolTipText("Okno pomocy");
+        item.addActionListener(e -> new Alert("<html>Klawiszologia <br/>" +
+                "L         - okno lokalne<br/>" +
+                "R         - okno zdalne<br/>" +
+                "lewo      - okno lokalne<br/>" +
+                "prawo     - okno zdalne<br/>" +
+                "T         - okno transferu<br/>" +
+                "Shift+F10 - okno kontekstowe<br/>" +
+                "</html>"));
+        menu.add(item);
+
+        menuBar.add(menu);
+        setJMenuBar(menuBar);
     }
 
     /**
@@ -273,9 +321,7 @@ public class MainWindow extends JFrame {
      */
     private JPanel preparePanel(final JTable dir,
                                 final JTextField path,
-                                final boolean local,
-                                final FilesModel model,
-                                final IExplorer explorer) {
+                                final boolean local) {
         final JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 

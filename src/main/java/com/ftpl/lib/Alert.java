@@ -33,8 +33,6 @@ public class Alert extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        label1.setText(x);
-
         buttonOK.addActionListener(e -> dispose());
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
