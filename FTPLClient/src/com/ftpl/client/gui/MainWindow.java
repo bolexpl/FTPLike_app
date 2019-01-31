@@ -355,12 +355,16 @@ public class MainWindow extends JFrame {
             @Override
             public void keyReleased(KeyEvent e) {
                 int i = e.getKeyCode();
+
                 if (i == KeyEvent.VK_RIGHT || i == KeyEvent.VK_R) {
                     remoteDir.requestFocus();
+
                 } else if (i == KeyEvent.VK_LEFT || i == KeyEvent.VK_L) {
                     localDir.requestFocus();
+
                 } else if (i == KeyEvent.VK_T) {
                     transferTable.requestFocus();
+
                 } else if (i == KeyEvent.VK_F10
                         && ((e.getModifiers() & KeyEvent.SHIFT_MASK) != 0)) {
                     Rectangle rectangle = dir.getCellRect(dir.getSelectedRow(), dir.getSelectedColumn(), true);
