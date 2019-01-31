@@ -1,4 +1,3 @@
-TODO PopUpMenu na SHIFT + F10
 TODO błąd usuwania przy anulowaniu
 
 kolejność:

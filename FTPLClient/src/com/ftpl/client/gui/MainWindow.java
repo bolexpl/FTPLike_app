@@ -21,7 +21,7 @@ import java.net.URL;
 /**
  * Klasa głównego okna
  */
-public class MainWindow extends JFrame implements KeyListener {
+public class MainWindow extends JFrame {
 
     private FilesModel localModel;
     private final JTable localDir;
@@ -54,6 +54,9 @@ public class MainWindow extends JFrame implements KeyListener {
 
     private TransferModel transferModel;
     private JTable transferTable;
+
+    private EnterAction enterAction;
+    private BackSpaceAction backSpaceAction;
 
     public MainWindow() {
         super("FTP-like Client");
@@ -352,14 +355,16 @@ public class MainWindow extends JFrame implements KeyListener {
             @Override
             public void keyReleased(KeyEvent e) {
                 int i = e.getKeyCode();
-                if (i == KeyEvent.VK_RIGHT) {
+                if (i == KeyEvent.VK_RIGHT || i == KeyEvent.VK_R) {
                     remoteDir.requestFocus();
-                } else if (i == KeyEvent.VK_LEFT) {
+                } else if (i == KeyEvent.VK_LEFT || i == KeyEvent.VK_L) {
                     localDir.requestFocus();
+                } else if (i == KeyEvent.VK_T) {
+                    transferTable.requestFocus();
                 } else if (i == KeyEvent.VK_F10
                         && ((e.getModifiers() & KeyEvent.SHIFT_MASK) != 0)) {
-                    //TODO
-                    showPopUpMenu(local, null);
+                    Rectangle rectangle = dir.getCellRect(dir.getSelectedRow(), dir.getSelectedColumn(), true);
+                    showPopUpMenu(local, dir, rectangle.x, rectangle.y);
                 }
             }
         });
@@ -386,22 +391,11 @@ public class MainWindow extends JFrame implements KeyListener {
                 .put(KeyStroke
                         .getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "BackSpace");
 
-        dir.getActionMap().put("Enter", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int[] indexes = dir.getSelectedRows();
+        enterAction = new EnterAction(dir, path);
+        backSpaceAction = new BackSpaceAction(dir, path);
 
-                if (indexes.length == 1) {
-                    open(explorer, dir, path, model);
-                }
-            }
-        });
-        dir.getActionMap().put("BackSpace", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                open(explorer, dir, path, model, 0);
-            }
-        });
+        dir.getActionMap().put("Enter", enterAction);
+        dir.getActionMap().put("BackSpace", backSpaceAction);
 
         JScrollPane jScrollPane = new JScrollPane(dir);
         panel.setLayout(new BorderLayout());
@@ -411,12 +405,12 @@ public class MainWindow extends JFrame implements KeyListener {
     }
 
     private void showPopUpMenu(boolean local, MouseEvent e) {
-        //TODO
+        showPopUpMenu(local, e.getComponent(), e.getX(), e.getY());
+    }
+
+    private void showPopUpMenu(boolean local, Component component, int x, int y) {
         PopUp popUp = new PopUp(local, this);
-        if (e == null)
-            popUp.show(null, 50, 50);
-        else
-            popUp.show(e.getComponent(), e.getX(), e.getY());
+        popUp.show(component, x, y);
     }
 
     /**
@@ -465,7 +459,7 @@ public class MainWindow extends JFrame implements KeyListener {
                 return;
             }
 
-            char tab[] = passwordField.getPassword();
+            char[] tab = passwordField.getPassword();
             if (tab.length == 0) {
                 new Alert("Hasło jest wymagane");
                 return;
@@ -525,6 +519,10 @@ public class MainWindow extends JFrame implements KeyListener {
             } else if (!remoteExplorer.connectActive()) new Alert("Błąd połączenia");
 
             remoteModel.setExplorer(remoteExplorer);
+            enterAction.setModel(remoteModel);
+            enterAction.setExplorer(remoteExplorer);
+            backSpaceAction.setModel(remoteModel);
+            backSpaceAction.setExplorer(remoteExplorer);
 
             return 0;
         } catch (IOException e) {
@@ -718,7 +716,7 @@ public class MainWindow extends JFrame implements KeyListener {
                        final String path2, final FilesModel model,
                        final boolean copy) {
         new Thread(() -> {
-            String tab[] = path1.split("/");
+            String[] tab = path1.split("/");
             try {
                 if (copy)
                     explorer.copy(path1, path2 + "/" + tab[tab.length - 1]);
@@ -808,33 +806,81 @@ public class MainWindow extends JFrame implements KeyListener {
     }
 
     /**
-     * {@inheritDoc}
+     * Klasa obsługująca zdarzenie naciśnięcia Enter
      */
-    @Override
-    public void keyTyped(KeyEvent e) {
+    private class EnterAction extends AbstractAction {
+
+        private JTable dir;
+        private JTextField path;
+        private FilesModel model;
+        private IExplorer explorer;
+
+        /**
+         * Creates an {@code Action}.
+         */
+        EnterAction(JTable dir, JTextField path) {
+            this.dir = dir;
+            this.path = path;
+        }
+
+        void setModel(FilesModel model) {
+            this.model = model;
+        }
+
+        void setExplorer(IExplorer explorer) {
+            this.explorer = explorer;
+        }
+
+        /**
+         * Invoked when an action occurs.
+         *
+         * @param e event
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int[] indexes = dir.getSelectedRows();
+
+            if (indexes.length == 1) {
+                open(explorer, dir, path, model);
+            }
+        }
     }
 
     /**
-     * {@inheritDoc}
+     * Klasa obsługująca zdarzenie naciśnięcia Backspace
      */
-    @Override
-    public void keyPressed(KeyEvent e) {
+    private class BackSpaceAction extends AbstractAction {
 
-    }
+        private JTable dir;
+        private JTextField path;
+        private FilesModel model;
+        private IExplorer explorer;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void keyReleased(KeyEvent e) {
-//        int i = e.getKeyCode();
-//        if (i == KeyEvent.VK_RIGHT) {
-//            remoteDir.requestFocus();
-//        } else if (i == KeyEvent.VK_LEFT) {
-//            localDir.requestFocus();
-//        } else if (i == KeyEvent.VK_F10 && ((e.getModifiers() & KeyEvent.SHIFT_MASK) != 0)) {
-//            System.out.println(getFocusOwner());
-//        }
+        /**
+         * Creates an {@code Action}.
+         */
+        BackSpaceAction(JTable dir, JTextField path) {
+            this.dir = dir;
+            this.path = path;
+        }
+
+        void setModel(FilesModel model) {
+            this.model = model;
+        }
+
+        void setExplorer(IExplorer explorer) {
+            this.explorer = explorer;
+        }
+
+        /**
+         * Invoked when an action occurs.
+         *
+         * @param e event
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            open(explorer, dir, path, model, 0);
+        }
     }
 
     /**
