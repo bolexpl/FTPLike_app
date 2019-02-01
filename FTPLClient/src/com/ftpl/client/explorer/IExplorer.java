@@ -58,7 +58,7 @@ public interface IExplorer {
      * @param fileName Nazwa pliku
      * @param data     Ciąg znaków
      * @return sukces
-     * @throws IOException wyjątek
+     * @throws IOException gdy błąd I/O
      */
     boolean append(String fileName, String data) throws IOException;
 

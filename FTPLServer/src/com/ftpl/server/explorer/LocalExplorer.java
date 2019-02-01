@@ -143,22 +143,9 @@ public class LocalExplorer implements UtilExplorerInterface, Utils.AppendExplore
      * @param fileName Nazwa pliku
      * @param data     Ciąg znaków
      * @return sukces
-     * @throws IOException wyjątek
+     * @throws IOException gdy błąd I/O
      */
     public boolean append(String fileName, String data) throws IOException {
-        //TODO do Utils
-//        File f = new File(dir + "/" + fileName);
-//
-//        if (!f.exists() || !f.canWrite()) return false;
-//
-//        FileWriter writer = new FileWriter(f, true);
-//        BufferedWriter buff = new BufferedWriter(writer);
-//        PrintWriter printWriter = new PrintWriter(buff);
-//
-//        printWriter.write(data + "\n");
-//
-//        printWriter.close();
-//        return true;
         return Utils.append(this, fileName, data);
     }
 

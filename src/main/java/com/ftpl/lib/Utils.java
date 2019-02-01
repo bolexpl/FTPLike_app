@@ -141,6 +141,14 @@ public class Utils {
         return f.delete();
     }
 
+    /**
+     * Dopisywanie do pliku
+     * @param explorer explorer
+     * @param fileName nazwa pliku
+     * @param data dane
+     * @return sukces
+     * @throws IOException gdy błąd I/O
+     */
     public static boolean append(AppendExplorer explorer, String fileName, String data) throws IOException{
         File f = new File(explorer.getDir() + "/" + fileName);
 
