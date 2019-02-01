@@ -395,9 +395,11 @@ public class RemoteExplorer implements IExplorer {
      * Metoda anulująca transfer przychodzący
      *
      * @param nf informacje o pliku
-     * */
+     */
     public void cancelReceiveTransfer(NewFile nf) throws IOException {
-        write(Protocol.CANCEL);
+        if (dataReceiveThread.list.indexOf(nf) == 0) {
+            write(Protocol.CANCEL);
+        }
         dataReceiveThread.list.remove(nf);
     }
 
@@ -405,7 +407,7 @@ public class RemoteExplorer implements IExplorer {
      * Metoda anulująca transfer wychodzący
      *
      * @param nf informacje o pliku
-     * */
+     */
     public void cancelSendTransfer(NewFile nf) {
         dataSendThread.list.remove(nf);
     }
@@ -417,8 +419,8 @@ public class RemoteExplorer implements IExplorer {
      * @throws IOException wyjątek
      */
     private void write(String s) throws IOException {
-        if(Utils.debug)
-            System.out.println("DEBUG: "+s);
+        if (Utils.debug)
+            System.out.println("DEBUG: " + s);
         writer.write(s);
         writer.newLine();
         writer.flush();
@@ -651,7 +653,7 @@ public class RemoteExplorer implements IExplorer {
         public void run() {
             while (running) {
 
-                if(Utils.debug){
+                if (Utils.debug) {
                     //sprawdzenie czy połączenie nadal istnieje
                     try {
                         int x;
@@ -767,8 +769,8 @@ public class RemoteExplorer implements IExplorer {
             long max = Utils.byteToLong(bytes);
             long current = 0;
 
-            byte cancel[] = Protocol.CANCEL.getBytes();
-            byte cancel2[] = ("\\" + Protocol.CANCEL).getBytes();
+            byte[] cancel = Protocol.CANCEL.getBytes();
+            byte[] cancel2 = ("\\" + Protocol.CANCEL).getBytes();
 
             while (current < max) try {
                 transferModel.setProgress(ti, (int) (((double) current / max) * 100.0));
@@ -787,6 +789,7 @@ public class RemoteExplorer implements IExplorer {
                 else
                     buff.write(data, 0, k);
                 current += k;
+
             } catch (SocketTimeoutException ignored) {
             }
             buff.flush();

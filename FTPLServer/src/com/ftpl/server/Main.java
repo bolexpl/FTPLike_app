@@ -16,7 +16,7 @@ import java.awt.*;
  */
 public class Main {
 
-    public static String database = "base.db";
+    public static String database = "ftpl_database.db";
 
     public static void main(String[] args) {
 

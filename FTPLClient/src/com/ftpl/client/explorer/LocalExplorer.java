@@ -1,6 +1,7 @@
 package com.ftpl.client.explorer;
 
 import com.ftpl.client.files.FileInfo;
+import com.ftpl.lib.UtilExplorerInterface;
 import com.ftpl.lib.Utils;
 
 import java.io.*;
@@ -10,7 +11,7 @@ import java.util.*;
 /**
  * Klasa do zarządzania plikami lokalnymi
  */
-public class LocalExplorer implements IExplorer {
+public class LocalExplorer implements IExplorer, Utils.AppendExplorer {
 
     private String dir;
 
@@ -23,9 +24,9 @@ public class LocalExplorer implements IExplorer {
      * @param dir początkowa ścieżka robocza
      */
     public LocalExplorer(String dir) {
-        if(Utils.isAccess(dir)){
+        if (Utils.isAccess(dir)) {
             this.dir = dir;
-        }else{
+        } else {
             this.dir = System.getProperty("user.home");
         }
         showHidden = false;
@@ -82,18 +83,20 @@ public class LocalExplorer implements IExplorer {
      */
     @Override
     public boolean append(String fileName, String data) throws IOException {
-        File f = new File(dir + "/" + fileName);
-
-        if (!f.exists() || !f.canWrite()) return false;
-
-        FileWriter writer = new FileWriter(f, true);
-        BufferedWriter buff = new BufferedWriter(writer);
-        PrintWriter printWriter = new PrintWriter(buff);
-
-        printWriter.write(data + "\n");
-
-        printWriter.close();
-        return true;
+        //TODO do Utils
+//        File f = new File(dir + "/" + fileName);
+//
+//        if (!f.exists() || !f.canWrite()) return false;
+//
+//        FileWriter writer = new FileWriter(f, true);
+//        BufferedWriter buff = new BufferedWriter(writer);
+//        PrintWriter printWriter = new PrintWriter(buff);
+//
+//        printWriter.write(data + "\n");
+//
+//        printWriter.close();
+//        return true;
+        return Utils.append(this, fileName, data);
     }
 
     /**
@@ -146,20 +149,7 @@ public class LocalExplorer implements IExplorer {
      */
     @Override
     public boolean rm(String name) {
-        File f = new File(name);
-
-        if (!f.exists()) return false;
-
-        if (f.isDirectory()) {
-            String[] entries = f.list();
-            if (entries != null) {
-                for (String s : entries) {
-                    rm(name + "/" + s);
-                }
-            }
-        }
-
-        return f.delete();
+        return Utils.removeFile(name);
     }
 
     /**

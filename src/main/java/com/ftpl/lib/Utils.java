@@ -1,7 +1,6 @@
 package com.ftpl.lib;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.nio.ByteBuffer;
 
@@ -77,7 +76,7 @@ public class Utils {
      *
      * @param dir Ścieżka do katalogu
      * @return Czy dostępny katalog
-     * */
+     */
     public static boolean isAccess(String dir) {
         File f = new File(dir);
         return f.exists() && f.isDirectory() && f.canRead() && f.canExecute();
@@ -86,16 +85,78 @@ public class Utils {
     /**
      * Metoda sprawdzająca równość tablic o różnych długościach
      *
-     * @param bigger większa tablica
+     * @param bigger  większa tablica
      * @param smaller mniejsza tablica
      * @return Czy wartości są równe
-     * */
-    public static boolean equalsArrays(byte bigger[], byte smaller[]) {
+     */
+    public static boolean equalsArrays(byte[] bigger, byte[] smaller) {
 
         for (int i = 0; i < smaller.length; i++)
             if (bigger[i] != smaller[i])
                 return false;
 
         return true;
+    }
+
+    /**
+     * Zmiana katalogu roboczego
+     *
+     * @param explorer  explorer
+     * @param directory katalog
+     * @return czy powodzenie
+     */
+    public static boolean cd(UtilExplorerInterface explorer, String directory) {
+        String dir = explorer.getDir();
+        String s = (dir.charAt(dir.length() - 1) != '/') ?
+                dir + "/" + directory : dir + directory;
+
+        try {
+            explorer.setDir(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Utils.isAccess(s);
+    }
+
+    /**
+     * Usuwanie pliku
+     *
+     * @param name nazwa pliku
+     * @return czy powodzenie
+     */
+    public static boolean removeFile(String name) {
+        File f = new File(name);
+
+        if (!f.exists()) return false;
+
+        if (f.isDirectory()) {
+            String[] entries = f.list();
+            if (entries != null) {
+                for (String s : entries) {
+                    removeFile(name + "/" + s);
+                }
+            }
+        }
+
+        return f.delete();
+    }
+
+    public static boolean append(AppendExplorer explorer, String fileName, String data) throws IOException{
+        File f = new File(explorer.getDir() + "/" + fileName);
+
+        if (!f.exists() || !f.canWrite()) return false;
+
+        FileWriter writer = new FileWriter(f, true);
+        BufferedWriter buff = new BufferedWriter(writer);
+        PrintWriter printWriter = new PrintWriter(buff);
+
+        printWriter.write(data + "\n");
+
+        printWriter.close();
+        return true;
+    }
+
+    public interface AppendExplorer{
+        String getDir();
     }
 }

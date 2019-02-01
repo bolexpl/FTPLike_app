@@ -55,8 +55,8 @@ public class MainWindow extends JFrame {
     private TransferModel transferModel;
     private JTable transferTable;
 
-    private EnterAction enterAction;
-    private BackSpaceAction backSpaceAction;
+    private EnterAction rEnterAction;
+    private BackSpaceAction rBackspaceAction;
 
     public MainWindow() {
         super("FTP-like Client");
@@ -441,8 +441,18 @@ public class MainWindow extends JFrame {
                 .put(KeyStroke
                         .getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "BackSpace");
 
-        enterAction = new EnterAction(dir, path);
-        backSpaceAction = new BackSpaceAction(dir, path);
+        EnterAction enterAction = new EnterAction(dir, path);
+        BackSpaceAction backSpaceAction = new BackSpaceAction(dir, path);
+
+        if (local) {
+            enterAction.setModel(localModel);
+            enterAction.setExplorer(localExplorer);
+            backSpaceAction.setModel(localModel);
+            backSpaceAction.setExplorer(localExplorer);
+        } else {
+            rEnterAction = enterAction;
+            rBackspaceAction = backSpaceAction;
+        }
 
         dir.getActionMap().put("Enter", enterAction);
         dir.getActionMap().put("BackSpace", backSpaceAction);
@@ -454,10 +464,24 @@ public class MainWindow extends JFrame {
         return panel;
     }
 
+    /**
+     * Pokazanie Menu kotekstowego
+     *
+     * @param local true jeśli lokalny
+     * @param e     zdarzenie myszki
+     */
     private void showPopUpMenu(boolean local, MouseEvent e) {
         showPopUpMenu(local, e.getComponent(), e.getX(), e.getY());
     }
 
+    /**
+     * Pokazanie Menu kotekstowego
+     *
+     * @param local     true jeśli lokalny
+     * @param component komponent na którym wyświetlić
+     * @param x         x
+     * @param y         y
+     */
     private void showPopUpMenu(boolean local, Component component, int x, int y) {
         PopUp popUp = new PopUp(local, this);
         popUp.show(component, x, y);
@@ -569,10 +593,10 @@ public class MainWindow extends JFrame {
             } else if (!remoteExplorer.connectActive()) new Alert("Błąd połączenia");
 
             remoteModel.setExplorer(remoteExplorer);
-            enterAction.setModel(remoteModel);
-            enterAction.setExplorer(remoteExplorer);
-            backSpaceAction.setModel(remoteModel);
-            backSpaceAction.setExplorer(remoteExplorer);
+            rEnterAction.setModel(remoteModel);
+            rEnterAction.setExplorer(remoteExplorer);
+            rBackspaceAction.setModel(remoteModel);
+            rBackspaceAction.setExplorer(remoteExplorer);
 
             return 0;
         } catch (IOException e) {
@@ -583,11 +607,25 @@ public class MainWindow extends JFrame {
 
     /**
      * Otwarcie katalogu
+     *
+     * @param explorer explorer
+     * @param dir      tabela katalogów
+     * @param path     pole ścieżki
+     * @param model    model
      */
     private void open(IExplorer explorer, JTable dir, JTextField path, FilesModel model) {
         open(explorer, dir, path, model, dir.getSelectedRow());
     }
 
+    /**
+     * Otwarcie katalogu
+     *
+     * @param explorer explorer
+     * @param dir      tabela katalogów
+     * @param path     pole ścieżki
+     * @param model    model
+     * @param index    index pliku w tabeli
+     */
     private void open(IExplorer explorer, JTable dir, JTextField path, FilesModel model, int index) {
         FilesModel.FileCell cell =
                 (FilesModel.FileCell) dir.getValueAt(index, 0);
@@ -842,14 +880,17 @@ public class MainWindow extends JFrame {
         for (int x : indexes) {
 
             cell = (TransferInfo) transferTable.getValueAt(x, -1);
-            transferModel.remove(cell);
             try {
                 if (cell.isSend())
                     remoteExplorer.cancelSendTransfer(cell.getNewFile());
                 else
                     remoteExplorer.cancelReceiveTransfer(cell.getNewFile());
+
+                System.out.println(cell.getNewFile().getName());
+                transferModel.remove(cell);
+
             } catch (IOException e) {
-                new Alert("Błąd wysyłania");
+                new Alert("Błąd przesyłania");
                 e.printStackTrace();
             }
         }

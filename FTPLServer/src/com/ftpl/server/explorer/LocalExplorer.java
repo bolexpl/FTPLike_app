@@ -1,5 +1,6 @@
 package com.ftpl.server.explorer;
 
+import com.ftpl.lib.UtilExplorerInterface;
 import com.ftpl.lib.Utils;
 
 import java.io.*;
@@ -11,14 +12,14 @@ import java.util.List;
 /**
  * Klasa do zarządzania plikami lokalnymi
  */
-public class LocalExplorer {
+public class LocalExplorer implements UtilExplorerInterface, Utils.AppendExplorer {
 
     private String dir;
 
     public LocalExplorer(String dir) {
-        if(Utils.isAccess(dir)){
+        if (Utils.isAccess(dir)) {
             this.dir = dir;
-        }else{
+        } else {
             this.dir = System.getProperty("user.home");
         }
     }
@@ -53,13 +54,7 @@ public class LocalExplorer {
      * @return sukces
      */
     public boolean cd(String directory) {
-        String s = (dir.charAt(dir.length() - 1) != '/') ?
-                dir+"/"+directory : dir + directory;
-
-        if (Utils.isAccess(s)) {
-            dir = s;
-        }
-        return Utils.isAccess(s);
+        return Utils.cd(this, directory);
     }
 
     /**
@@ -69,20 +64,7 @@ public class LocalExplorer {
      * @return sukces
      */
     public boolean rm(String name) {
-        File f = new File(name);
-
-        if (!f.exists()) return false;
-
-        if (f.isDirectory()) {
-            String[] entries = f.list();
-            if (entries != null) {
-                for (String s : entries) {
-                    rm(name + "/" + s);
-                }
-            }
-        }
-
-        return f.delete();
+        return Utils.removeFile(name);
     }
 
     /**
@@ -164,18 +146,20 @@ public class LocalExplorer {
      * @throws IOException wyjątek
      */
     public boolean append(String fileName, String data) throws IOException {
-        File f = new File(dir + "/" + fileName);
-
-        if (!f.exists() || !f.canWrite()) return false;
-
-        FileWriter writer = new FileWriter(f, true);
-        BufferedWriter buff = new BufferedWriter(writer);
-        PrintWriter printWriter = new PrintWriter(buff);
-
-        printWriter.write(data + "\n");
-
-        printWriter.close();
-        return true;
+        //TODO do Utils
+//        File f = new File(dir + "/" + fileName);
+//
+//        if (!f.exists() || !f.canWrite()) return false;
+//
+//        FileWriter writer = new FileWriter(f, true);
+//        BufferedWriter buff = new BufferedWriter(writer);
+//        PrintWriter printWriter = new PrintWriter(buff);
+//
+//        printWriter.write(data + "\n");
+//
+//        printWriter.close();
+//        return true;
+        return Utils.append(this, fileName, data);
     }
 
     /**

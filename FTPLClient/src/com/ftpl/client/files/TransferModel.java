@@ -53,6 +53,11 @@ public class TransferModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    /**
+     * Ustawienie poziomu postępu
+     * @param ti obiekt reprezentujący transfer
+     * @param progress procent postępu
+     */
     public void setProgress(TransferInfo ti, int progress) {
         int i;
         for (i = 0; i < list.size(); i++) {
@@ -113,7 +118,7 @@ public class TransferModel extends AbstractTableModel {
      * @return the value Object at the specified cell
      */
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
+    public synchronized Object getValueAt(int rowIndex, int columnIndex) {
 
         TransferInfo ti = list.get(rowIndex);
 
