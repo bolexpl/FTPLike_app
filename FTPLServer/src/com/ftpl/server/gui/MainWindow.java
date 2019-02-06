@@ -1,5 +1,6 @@
 package com.ftpl.server.gui;
 
+import com.ftpl.lib.Utils;
 import com.ftpl.server.server.ServerThread;
 import com.ftpl.server.clients.ClientsModel;
 
@@ -121,13 +122,15 @@ public class MainWindow extends JFrame {
             try {
                 Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
                 while (n.hasMoreElements()) {
-                    NetworkInterface e = n.nextElement();
-                    Enumeration<InetAddress> a = e.getInetAddresses();
-                    String i = a.nextElement().toString().split("%")[1];
-                    String ipv4 = a.nextElement().toString();
+//                    NetworkInterface e = n.nextElement();
+//                    Enumeration<InetAddress> a = e.getInetAddresses();
+//                    String i = a.nextElement().toString().split("%")[1];
+//                    String ipv4 = a.nextElement().toString();
 
-                    addColoredText(i, Color.BLACK);
-                    addColoredText(ipv4, Color.BLACK);
+                    String[] ipv4 = Utils.nextInterface(n.nextElement());
+
+                    addColoredText(ipv4[0], Color.BLACK);
+                    addColoredText(ipv4[1], Color.BLACK);
                     addColoredText("-------------", Color.BLACK);
                 }
             } catch (SocketException e) {

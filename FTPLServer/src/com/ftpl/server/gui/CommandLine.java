@@ -159,13 +159,15 @@ public class CommandLine {
                 System.out.println("Dostępne interfejsy:");
                 System.out.println("-------------");
                 while (n.hasMoreElements()) {
-                    NetworkInterface e = n.nextElement();
-                    Enumeration<InetAddress> a = e.getInetAddresses();
-                    String i = a.nextElement().toString().split("%")[1];
-                    String ipv4 = a.nextElement().toString();
+//                    NetworkInterface e = n.nextElement();
+//                    Enumeration<InetAddress> a = e.getInetAddresses();
+//                    String i = a.nextElement().toString().split("%")[1];
+//                    String ipv4 = a.nextElement().toString();
 
-                    System.out.println(i);
-                    System.out.println(ipv4);
+                    String[] ipv4 = Utils.nextInterface(n.nextElement());
+
+                    System.out.println(ipv4[0]);
+                    System.out.println(ipv4[1]);
                     System.out.println("-------------");
                 }
                 System.out.println("Serwer wystartował.");

@@ -1,8 +1,11 @@
 package com.ftpl.lib;
 
 import java.io.*;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.nio.ByteBuffer;
+import java.util.Enumeration;
 
 /**
  * Klasa konwersji między typem long i talbicą bajtów
@@ -162,6 +165,13 @@ public class Utils {
 
         printWriter.close();
         return true;
+    }
+
+    public static String[] nextInterface(NetworkInterface e){
+        Enumeration<InetAddress> a = e.getInetAddresses();
+        String i = a.nextElement().toString().split("%")[1];
+        String ipv4 =  a.nextElement().toString();
+        return new String[]{i,ipv4};
     }
 
     public interface AppendExplorer{
