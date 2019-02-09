@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.net.*;
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * Klasa głównego okna
@@ -122,16 +123,23 @@ public class MainWindow extends JFrame {
             try {
                 Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
                 while (n.hasMoreElements()) {
-//                    NetworkInterface e = n.nextElement();
-//                    Enumeration<InetAddress> a = e.getInetAddresses();
-//                    String i = a.nextElement().toString().split("%")[1];
-//                    String ipv4 = a.nextElement().toString();
+                    NetworkInterface networkInterface = n.nextElement();
+                    List<String> ips = Utils.nextInterface(networkInterface);
 
-                    String[] ipv4 = Utils.nextInterface(n.nextElement());
+                    if (ips == null || ips.size() == 0) continue;
 
-                    addColoredText(ipv4[0], Color.BLACK);
-                    addColoredText(ipv4[1], Color.BLACK);
-                    addColoredText("-------------", Color.BLACK);
+                    addColoredText(networkInterface.getName(), Color.BLACK);
+
+                    for(String s : ips){
+                        addColoredText(s, Color.BLACK);
+                        addColoredText("-------------", Color.BLACK);
+                    }
+
+//                    String[] ipv4 = Utils.nextInterface(n.nextElement());
+//
+//                    addColoredText(ipv4[0], Color.BLACK);
+//                    addColoredText(ipv4[1], Color.BLACK);
+//                    addColoredText("-------------", Color.BLACK);
                 }
             } catch (SocketException e) {
                 e.printStackTrace();

@@ -159,16 +159,23 @@ public class CommandLine {
                 System.out.println("Dostępne interfejsy:");
                 System.out.println("-------------");
                 while (n.hasMoreElements()) {
-//                    NetworkInterface e = n.nextElement();
-//                    Enumeration<InetAddress> a = e.getInetAddresses();
-//                    String i = a.nextElement().toString().split("%")[1];
-//                    String ipv4 = a.nextElement().toString();
+                    NetworkInterface networkInterface = n.nextElement();
+                    List<String> ips = Utils.nextInterface(networkInterface);
 
-                    String[] ipv4 = Utils.nextInterface(n.nextElement());
+                    if (ips == null || ips.size() == 0) continue;
 
-                    System.out.println(ipv4[0]);
-                    System.out.println(ipv4[1]);
-                    System.out.println("-------------");
+                    System.out.println(networkInterface.getName());
+
+                    for(String s : ips){
+                        System.out.println(s);
+                        System.out.println("-------------");
+                    }
+
+//                    String[] ipv4 = Utils.nextInterface(n.nextElement());
+//
+//                    System.out.println(ipv4[0]);
+//                    System.out.println(ipv4[1]);
+//                    System.out.println("-------------");
                 }
                 System.out.println("Serwer wystartował.");
             } catch (SocketException e) {

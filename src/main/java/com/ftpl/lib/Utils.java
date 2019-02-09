@@ -5,6 +5,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Enumeration;
 
 /**
@@ -167,11 +169,26 @@ public class Utils {
         return true;
     }
 
-    public static String[] nextInterface(NetworkInterface e){
+    public static List<String> nextInterface(NetworkInterface e){
         Enumeration<InetAddress> a = e.getInetAddresses();
-        String i = a.nextElement().toString().split("%")[1];
-        String ipv4 =  a.nextElement().toString();
-        return new String[]{i,ipv4};
+
+        if (!a.hasMoreElements()) return null;
+
+        List<String> list = new ArrayList<>();
+
+        InetAddress i;
+        while (a.hasMoreElements()) {
+            i = a.nextElement();
+            if (i.getHostAddress().split("\\.").length != 4) continue;
+            list.add(i.getHostName() + "  ---->  " + i.getHostAddress());
+        }
+
+        return list;
+
+//        Enumeration<InetAddress> a = e.getInetAddresses();
+//        String i = a.nextElement().toString().split("%")[1];
+//        String ipv4 =  a.nextElement().toString();
+//        return new String[]{i,ipv4};
     }
 
     public interface AppendExplorer{
