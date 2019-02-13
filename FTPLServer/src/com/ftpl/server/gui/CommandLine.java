@@ -170,12 +170,6 @@ public class CommandLine {
                         System.out.println(s);
                         System.out.println("-------------");
                     }
-
-//                    String[] ipv4 = Utils.nextInterface(n.nextElement());
-//
-//                    System.out.println(ipv4[0]);
-//                    System.out.println(ipv4[1]);
-//                    System.out.println("-------------");
                 }
                 System.out.println("Serwer wystartował.");
             } catch (SocketException e) {

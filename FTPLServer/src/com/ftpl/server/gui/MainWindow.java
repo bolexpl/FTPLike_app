@@ -117,7 +117,6 @@ public class MainWindow extends JFrame {
             ServerThread thread = new ServerThread(port, this, model, model.getList());
             thread.start();
             start.setText("Zakończ");
-            addColoredText("Server started at port " + Integer.toString(port), Color.BLACK);
             addColoredText("Available addresses:", Color.BLACK);
 
             try {
@@ -134,13 +133,9 @@ public class MainWindow extends JFrame {
                         addColoredText(s, Color.BLACK);
                         addColoredText("-------------", Color.BLACK);
                     }
-
-//                    String[] ipv4 = Utils.nextInterface(n.nextElement());
-//
-//                    addColoredText(ipv4[0], Color.BLACK);
-//                    addColoredText(ipv4[1], Color.BLACK);
-//                    addColoredText("-------------", Color.BLACK);
                 }
+                addColoredText("Server started at port " + port, Color.BLACK);
+
             } catch (SocketException e) {
                 e.printStackTrace();
             }
