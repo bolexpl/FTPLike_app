@@ -537,6 +537,7 @@ public class RemoteExplorer implements IExplorer {
 
             }
             send(Protocol.EOF);
+            outASCII.flush();
             buff.close();
         }
 
@@ -558,7 +559,7 @@ public class RemoteExplorer implements IExplorer {
 
             long max = f.length();
             long current = 0;
-            send(Utils.longToByte(max));
+            out.write(Utils.longToByte(max));
 
             byte[] cancel = Protocol.CANCEL.getBytes();
             byte[] cancel2 = ("\\" + Protocol.CANCEL).getBytes();
@@ -568,15 +569,15 @@ public class RemoteExplorer implements IExplorer {
                 k = buff.read(data, 0, Protocol.PACKET_LENGTH);
 
                 if (!list.contains(nf)) {
-                    send(Protocol.CANCEL.getBytes());
+                    out.write(Protocol.CANCEL.getBytes());
                     buff.close();
                     return;
                 }
 
                 if (k == cancel.length && Utils.equalsArrays(data, cancel))
-                    send(cancel2, k + 1);
+                    out.write(cancel2, 0, k + 1);
                 else
-                    send(data, k);
+                    out.write(data, 0, k);
                 current += k;
             }
 
@@ -592,29 +593,6 @@ public class RemoteExplorer implements IExplorer {
         void send(String data) throws IOException {
             outASCII.write(data);
             outASCII.newLine();
-            outASCII.flush();
-        }
-
-        /**
-         * Metoda do wysyłania danych przez dataSocket
-         *
-         * @param data dane binarne
-         * @throws IOException wyjątek
-         */
-        void send(byte[] data) throws IOException {
-            send(data, data.length);
-        }
-
-        /**
-         * Metoda do wysyłania danych przez dataSocket
-         *
-         * @param data dane binarne
-         * @param len  długość danych w bajtach
-         * @throws IOException wyjątek
-         */
-        void send(byte[] data, int len) throws IOException {
-            out.write(data, 0, len);
-            out.flush();
         }
     }
 

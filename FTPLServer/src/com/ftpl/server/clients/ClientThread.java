@@ -486,7 +486,7 @@ public class ClientThread extends Thread {
      * @throws IOException wyjątek
      */
     private void write(String s) throws IOException {
-        if(Utils.debug) {
+        if (Utils.debug) {
             System.out.println("DEBUG: " + s);
         }
         writer.write(s);
@@ -664,6 +664,7 @@ public class ClientThread extends Thread {
                 }
             }
             send(Protocol.EOF);
+            outASCII.flush();
 
             buff.close();
         }
@@ -681,18 +682,22 @@ public class ClientThread extends Thread {
             byte[] data = new byte[Protocol.PACKET_LENGTH];
 
             long size = f.length();
-            send(Utils.longToByte(size));
+//            send(Utils.longToByte(size));
+            out.write(Utils.longToByte(size));
 
             while (size > 0) {
                 if (!list.contains(f)) {
                     buff.close();
-                    send(Protocol.CANCEL.getBytes());
+//                    send(Protocol.CANCEL.getBytes());
+                    out.write(Protocol.CANCEL.getBytes());
                     return;
                 }
                 k = buff.read(data, 0, Protocol.PACKET_LENGTH);
-                send(data, k);
+//                send(data, k);
+                out.write(data, 0, k);
                 size -= k;
             }
+            out.flush();
 
             buff.close();
         }
@@ -704,32 +709,8 @@ public class ClientThread extends Thread {
          * @throws IOException wyjątek
          */
         void send(String data) throws IOException {
-            System.out.println(data);
             outASCII.write(data);
             outASCII.newLine();
-            outASCII.flush();
-        }
-
-        /**
-         * Metoda do wysyłania danych przez dataSocket
-         *
-         * @param data dane binarne
-         * @throws IOException wyjątek
-         */
-        void send(byte[] data) throws IOException {
-            send(data, data.length);
-        }
-
-        /**
-         * Metoda do wysyłania danych przez dataSocket
-         *
-         * @param data dane binarne
-         * @param len  długość danych w bajtach
-         * @throws IOException wyjątek
-         */
-        void send(byte[] data, int len) throws IOException {
-            out.write(data, 0, len);
-            out.flush();
         }
     }
 
@@ -828,8 +809,8 @@ public class ClientThread extends Thread {
                 else
                     buff.write(s);
                 buff.newLine();
-                buff.flush();
             }
+            buff.flush();
 
             buff.close();
         }
