@@ -54,7 +54,7 @@ public class ClientThread extends Thread {
         this.list = list;
 
         if (!Utils.debug)
-            controlSocket.setSoTimeout(500);
+            controlSocket.setSoTimeout(Protocol.TIMEOUT);
 
         reader = new BufferedReader(new InputStreamReader(controlSocket.getInputStream()));
         writer = new BufferedWriter(new OutputStreamWriter(controlSocket.getOutputStream()));
@@ -75,8 +75,19 @@ public class ClientThread extends Thread {
 
     @Override
     public void run() {
+        boolean flag;
+
+        while(true){
+            try {
+                flag = login();
+                break;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         try {
-            if (login()) {
+            if (flag) {
                 transferMode();
                 listen();
             } else {
@@ -682,18 +693,15 @@ public class ClientThread extends Thread {
             byte[] data = new byte[Protocol.PACKET_LENGTH];
 
             long size = f.length();
-//            send(Utils.longToByte(size));
             out.write(Utils.longToByte(size));
 
             while (size > 0) {
                 if (!list.contains(f)) {
                     buff.close();
-//                    send(Protocol.CANCEL.getBytes());
                     out.write(Protocol.CANCEL.getBytes());
                     return;
                 }
                 k = buff.read(data, 0, Protocol.PACKET_LENGTH);
-//                send(data, k);
                 out.write(data, 0, k);
                 size -= k;
             }

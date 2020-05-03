@@ -376,7 +376,7 @@ public class RemoteExplorer implements IExplorer {
      */
     private void connectStreams() throws IOException {
         if (!Utils.debug)
-            dataSocket.setSoTimeout(500);
+            dataSocket.setSoTimeout(Protocol.TIMEOUT);
         if (ascii) {
             outASCII = new BufferedWriter(new OutputStreamWriter(dataSocket.getOutputStream()));
             inASCII = new BufferedReader(new InputStreamReader(dataSocket.getInputStream()));

@@ -5,6 +5,7 @@ package com.ftpl.lib;
  */
 public class Protocol {
 
+    public static final int TIMEOUT = 1000;
     public static final String USER = "USER";
     public static final String PASSWORD = "PASS";
     public static final String OK = "OK";
